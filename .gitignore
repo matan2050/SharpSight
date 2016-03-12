@@ -1,0 +1,12 @@
+*.suo
+*.dll
+*.pdb
+*.cache
+SharpSight/obj/Debug/SharpSight.csproj.FileListAbsolute.txt
+SharpSight/obj/
+*.exe
+UnitTests/obj/Debug/UnitTests.csproj.FileListAbsolute.txt
+UnitTests/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+UnitTests/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+UnitTests/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+UnitTests/bin/

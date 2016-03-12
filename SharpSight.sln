@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSight", "SharpSight\SharpSight.csproj", "{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
