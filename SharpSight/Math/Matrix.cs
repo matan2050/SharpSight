@@ -23,6 +23,20 @@ namespace SharpSight.Math
 
 			matrixData = new double[dimensions[0], dimensions[1]];
 		}
+
+		public Matrix(Matrix copiedMat)
+		{
+			dimensions[0] = copiedMat.dimensions[0];
+			dimensions[1] = copiedMat.dimensions[1];
+
+			for (uint i = 0; i < copiedMat.dimensions[0]; i++)
+			{
+				for (uint j = 0; j < copiedMat.dimensions[1]; j++)
+				{
+					Element(i, j, copiedMat.Element(i, j));
+				}
+			}
+		}
 		#endregion
 
 
@@ -101,6 +115,18 @@ namespace SharpSight.Math
 			return returnedMatrix;
 		} 
 
+		public static Matrix operator +(double scalar, Matrix mat)
+		{
+			Matrix returnedMat = new Matrix(mat.dimensions[0], mat.dimensions[1]);
+			for (uint i = 0; i < mat.dimensions[0]; i++)
+			{
+				for (uint j = 0; j < mat.dimensions[1]; j++)
+				{
+					returnedMat.Element(i, j, mat.Element(i, j) + scalar);
+				}
+			}
+			return returnedMat;
+		}
 
 		public static Matrix operator -(Matrix first, Matrix second)
 		{
@@ -118,6 +144,29 @@ namespace SharpSight.Math
 			return first + second;
 		}
 
+		public static Matrix operator -(double scalar, Matrix mat)
+		{
+			Matrix returnedMat = new Matrix(mat.dimensions[0], mat.dimensions[1]);
+
+			for (uint i = 0; i < mat.dimensions[0]; i++)
+			{
+				for (uint j = 0; j < mat.dimensions[1]; j++)
+				{
+					returnedMat.Element(i, j, scalar - mat.Element(i, j));
+				}
+			}
+
+			return returnedMat;
+		}
+
+		public static Matrix operator -(Matrix mat, double scalar)
+		{
+			Matrix returnedMat = scalar - mat;
+
+			returnedMat = (-1.0)*returnedMat;
+
+			return returnedMat;
+		}
 
 		public static Matrix operator *(Matrix first, Matrix second)
 		{
@@ -139,6 +188,20 @@ namespace SharpSight.Math
 			}
 
 			return returnedMatrix;
+		}
+
+		public static Matrix operator *(double scalar, Matrix mat)
+		{
+			Matrix returnedMat = new Matrix(mat.dimensions[0], mat.dimensions[1]);
+
+			for (uint i = 0; i < mat.dimensions[0]; i++)
+			{
+				for (uint j = 0; j < mat.dimensions[1]; j++)
+				{
+					returnedMat.Element(i, j, scalar * mat.Element(i, j));
+				}
+			}
+			return returnedMat;
 		}
 		#endregion
 
