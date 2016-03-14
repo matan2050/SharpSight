@@ -15,6 +15,8 @@ namespace SharpSight.Math
 
 
 		#region CONSTRUCTORS
+		
+		// default ctor
 		public Matrix(uint nRows, uint nCols)
 		{
 			dimensions = new uint[2];
@@ -24,6 +26,7 @@ namespace SharpSight.Math
 			matrixData = new double[dimensions[0], dimensions[1]];
 		}
 
+		// copy ctor
 		public Matrix(Matrix copiedMat)
 		{
 			dimensions[0] = copiedMat.dimensions[0];
@@ -35,6 +38,27 @@ namespace SharpSight.Math
 				{
 					Element(i, j, copiedMat.Element(i, j));
 				}
+			}
+		}
+
+		// special matrix ctor
+		public Matrix(uint nRows, uint nCols, string type)
+		{
+			dimensions[0] = nRows;
+			dimensions[1] = nCols;
+			matrixData = new double[dimensions[0], dimensions[1]];
+
+			switch (type)
+			{
+				case "eye":
+					Eye();
+					break;
+				case "ones":
+					Ones();
+					break;
+				case "zeros":
+					Zeros();
+					break;		
 			}
 		}
 		#endregion
@@ -94,6 +118,32 @@ namespace SharpSight.Math
 				}
 			}
 		}
+
+		public Matrix Concat(Matrix a, Matrix b, bool horizontal)
+		{
+			if (horizontal)
+			{
+				if (a.dimensions[0] == b.dimensions[0])
+				{
+					Matrix returnedMat = new Matrix(a.dimensions[0], a.dimensions[1] + b.dimensions[1]);
+					for (uint i = 0; i < a.dimensions[0]; i++)
+					{
+						for (uint j = 0; j < a.dimensions[1] + b.dimensions[1]; j++)
+						{
+							if (j > a.dimensions[1])
+							{
+								returnedMat.Element(i, j, b.Element(i, j - a.dimensions[1]));
+							}
+							else
+							{
+								returnedMat.Element(i, j, a.Element(i, j));
+							}
+						}
+					}
+				}
+			}
+			return returnedMat;
+		}
 		#endregion
 
 
@@ -126,6 +176,11 @@ namespace SharpSight.Math
 				}
 			}
 			return returnedMat;
+		}
+
+		public static Matrix operator +(Matrix mat, double scalar)
+		{
+			return scalar + mat;
 		}
 
 		public static Matrix operator -(Matrix first, Matrix second)
@@ -202,6 +257,11 @@ namespace SharpSight.Math
 				}
 			}
 			return returnedMat;
+		}
+
+		public static Matrix operator *(Matrix mat, double scalar)
+		{
+			return scalar * mat;
 		}
 		#endregion
 
