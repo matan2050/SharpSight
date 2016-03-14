@@ -29,7 +29,11 @@ namespace SharpSight.CameraModel
 		{
 			K = _K;
 			R = _R;
-			C = _C; 
+			C = _C;
+
+			Matrix eye = new Matrix(3,3);
+			eye.Eye();
+			P = K * R * eye.Concat((-1) * C, true);
 		}
 		#endregion
 	}
