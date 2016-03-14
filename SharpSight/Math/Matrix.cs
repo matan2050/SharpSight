@@ -10,7 +10,7 @@ namespace SharpSight.Math
 	{
 		#region FIELDS
 		private     double[,]       matrixData;
-		private     uint[]      dimensions;
+		private     uint[]			dimensions;
 		#endregion
 
 
@@ -38,27 +38,6 @@ namespace SharpSight.Math
 				{
 					Element(i, j, copiedMat.Element(i, j));
 				}
-			}
-		}
-
-		// special matrix ctor
-		public Matrix(uint nRows, uint nCols, string type)
-		{
-			dimensions[0] = nRows;
-			dimensions[1] = nCols;
-			matrixData = new double[dimensions[0], dimensions[1]];
-
-			switch (type)
-			{
-				case "eye":
-					Eye();
-					break;
-				case "ones":
-					Ones();
-					break;
-				case "zeros":
-					Zeros();
-					break;		
 			}
 		}
 		#endregion
@@ -119,30 +98,73 @@ namespace SharpSight.Math
 			}
 		}
 
-		public Matrix Concat(Matrix a, Matrix b, bool horizontal)
+		public Matrix Transpose()
 		{
+			Matrix transposed = new Matrix(this.dimensions[1], this.dimensions[0]);
+
+			for (uint i = 0; i < this.dimensions[0]; i++)
+			{
+				for (uint j = 0; j < this.dimensions[1]; j++)
+				{
+					transposed.Element(j, i, this.Element(i, j));
+				}
+			}
+
+			return transposed;
+		}
+
+		public Matrix Concat(Matrix b, bool horizontal)
+		{
+			Matrix returnedMat = new Matrix(0,0);
+
 			if (horizontal)
 			{
-				if (a.dimensions[0] == b.dimensions[0])
+				if (this.dimensions[0] == b.dimensions[0])
 				{
-					Matrix returnedMat = new Matrix(a.dimensions[0], a.dimensions[1] + b.dimensions[1]);
-					for (uint i = 0; i < a.dimensions[0]; i++)
+					returnedMat = new Matrix(this.dimensions[0], this.dimensions[1] + b.dimensions[1]);
+					for (uint i = 0; i < this.dimensions[0]; i++)
 					{
-						for (uint j = 0; j < a.dimensions[1] + b.dimensions[1]; j++)
+						for (uint j = 0; j < this.dimensions[1] + b.dimensions[1]; j++)
 						{
-							if (j > a.dimensions[1])
+							if (j >= this.dimensions[1])
 							{
-								returnedMat.Element(i, j, b.Element(i, j - a.dimensions[1]));
+								returnedMat.Element(i, j, b.Element(i, j - this.dimensions[1]));
 							}
 							else
 							{
-								returnedMat.Element(i, j, a.Element(i, j));
+								returnedMat.Element(i, j, this.Element(i, j));
 							}
 						}
 					}
 				}
 			}
 			return returnedMat;
+		}
+
+		public override string ToString()
+		{
+			string returnedString = "[";
+
+			for (uint i = 0; i < dimensions[0]; i++)
+			{
+				for (uint j = 0; j < dimensions[1]; j++)
+				{
+					returnedString += Element(i, j).ToString();
+
+					if (j != dimensions[1] - 1)
+					{
+						returnedString += ", ";
+					}
+					if ((j == dimensions[1] - 1) && (i != dimensions[0] - 1))
+					{
+						returnedString += '\n';
+					}
+				}
+			}
+
+			returnedString += ']';
+
+			return returnedString;
 		}
 		#endregion
 
@@ -229,7 +251,6 @@ namespace SharpSight.Math
 				throw new Exception();
 
 			Matrix		returnedMatrix		= new Matrix(first.dimensions[0], second.dimensions[1]);
-			double      currElements		= 0;
 
 			for (uint i = 0; i < returnedMatrix.dimensions[0]; i++)
 			{
@@ -263,6 +284,27 @@ namespace SharpSight.Math
 		{
 			return scalar * mat;
 		}
+
+		public static bool Equals(Matrix a, Matrix b)
+		{
+			if ((a.dimensions[0] != b.dimensions[0]) && (a.dimensions[1] != b.dimensions[1]))
+			{
+				return false;
+			}
+
+			for (uint i = 0; i < a.dimensions[0]; i++)
+			{
+				for (uint j = 0; j < a.dimensions[1]; j++)
+				{
+					if (a.Element(i, j) != b.Element(i, j))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
 		#endregion
 
 
@@ -281,6 +323,5 @@ namespace SharpSight.Math
 			return true;
 		}
 		#endregion
-
 	}
 }
