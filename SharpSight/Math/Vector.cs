@@ -35,11 +35,9 @@ namespace SharpSight.Math
 		#region OPERATOR_OVERLOADS
 		public static Vector operator*(Matrix mat, Vector vec)
 		{
-			Matrix		vecAsMatrix = new Matrix(vec);
-			Vector		product		= new Vector(mat.Dimensions[0]);
-
-			Matrix productAsMatrix = mat*vecAsMatrix;
-			product = (Vector)productAsMatrix;
+			Matrix		vecAsMatrix		= new Matrix(vec);
+			Matrix		productAsMatrix = mat*vecAsMatrix;
+			return (Vector)productAsMatrix;
 		}
 		#endregion
 	}
