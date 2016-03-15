@@ -27,22 +27,70 @@ namespace SharpSight.Math.Tests
 				return false;
 			}
 
+			if ((a.Element(0,0) != b.Element(0,0)) ||
+				(a.Element(0,1) != b.Element(0,1)) ||
+				(a.Element(1,0) != b.Element(1,0)) ||
+				(a.Element(1,1) != b.Element(1,1)) ||
+				(a.Element(2,0) != b.Element(2,0)) ||
+				(a.Element(2,1) != b.Element(2,1)))
+			{
+				return false;
+			}
+
 			return true;
 		}
 
-		public static void TestSpecialMatrices()
+		public static bool TestSpecialMatrices()
 		{
+			// Check if Zeros() produces an all zero matrix
+			Matrix refMat = new Matrix(3,3);
+			refMat.Zeros();
+
+			if ((refMat.Element(0, 0) != 0) ||
+				(refMat.Element(0, 1) != 0) ||
+				(refMat.Element(0, 2) != 0) ||
+				(refMat.Element(1, 0) != 0) ||
+				(refMat.Element(1, 1) != 0) ||
+				(refMat.Element(1, 2) != 0) ||
+				(refMat.Element(2, 0) != 0) ||
+				(refMat.Element(2, 1) != 0) ||
+				(refMat.Element(2, 2) != 0))
+			{
+				return false;
+			}
+
+
+			// if zeros work, check Eye()
+			refMat.Element(0, 0, 1);
+			refMat.Element(1, 1, 1);
+			refMat.Element(2, 2, 1);
+
 			Matrix a = new Matrix(3,3);
-			a.Ones();
-			Console.WriteLine(a.ToString());
+			a.Eye();
 
-			Matrix b = new Matrix(4,4);
-			b.Zeros();
-			Console.WriteLine(b.ToString());
+			//if (a != refMat)
+			if (a.Equals(refMat))
+			{
+				return false;
+			}
+			// Console.WriteLine(a.ToString());
 
-			Matrix c = new Matrix(2,2);
-			c.Eye();
-			Console.WriteLine(c.ToString());
+
+			// check Ones()
+			Matrix b = new Matrix(3,3);
+			refMat.Element(0, 1, 1);
+			refMat.Element(0, 2, 1);
+			refMat.Element(1, 0, 1);
+			refMat.Element(1, 2, 1);
+			refMat.Element(2, 0, 1);
+			refMat.Element(2, 1, 1);
+
+			//if (b != refMat)
+			if (b.Equals(refMat))
+			{
+				return false;
+			}
+			return true;
 		}
 
 		public static void TestConcatenation()
@@ -58,6 +106,14 @@ namespace SharpSight.Math.Tests
 
 			Matrix d = b.Concat(a, true);
 			Console.WriteLine(d.ToString());
+			
+			/*	FIX VERTICAL CONCATENATION
+			Matrix e = a.Concat(b.Transpose(), false);
+			Console.WriteLine(e.ToString());
+
+			Matrix f = b.Transpose().Concat(a, false);
+			Console.WriteLine(f.ToString());
+			*/ 
 		}
 	}
 }
