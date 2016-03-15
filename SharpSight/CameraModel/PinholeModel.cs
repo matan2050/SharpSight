@@ -7,7 +7,7 @@ using SharpSight.Math;
 
 namespace SharpSight.CameraModel
 {
-	public class PinholeModel
+	public class PinholeModel : BaseModel
 	{
 		#region FIELDS
 		private		Matrix		K;
@@ -34,6 +34,25 @@ namespace SharpSight.CameraModel
 			Matrix eye = new Matrix(3,3);
 			eye.Eye();
 			P = K * R * eye.Concat((-1) * C, true);
+		}
+		#endregion
+
+
+		#region METHODS
+		public override Vector PointToPixel(Vector point)
+		{
+			Vector		pixel			= new Vector(2);
+			Vector		pixelHomogenous = new Vector(3);
+
+			pixelHomogenous = P * point;
+
+			pixel.Element(0,
+				pixelHomogenous.Element(0) / pixelHomogenous.Element(2));
+
+			pixel.Element(1,
+				pixelHomogenous.Element(1) / pixelHomogenous.Element(2));
+
+			return pixel;
 		}
 		#endregion
 	}
