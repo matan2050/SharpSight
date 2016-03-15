@@ -30,8 +30,10 @@ namespace SharpSight.Math
 		// copy ctor
 		public Matrix(Matrix copiedMat)
 		{
+			dimensions = new uint[2];
 			dimensions[0] = copiedMat.dimensions[0];
 			dimensions[1] = copiedMat.dimensions[1];
+			matrixData = new double[dimensions[0], dimensions[1]];
 
 			for (uint i = 0; i < copiedMat.dimensions[0]; i++)
 			{
@@ -307,6 +309,26 @@ namespace SharpSight.Math
 						return false;
 					}
 				}
+			}
+
+			return true;
+		}
+
+		public static bool operator ==(Matrix a, Matrix b)
+		{
+			if (a.Equals(b))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		public static bool operator !=(Matrix a, Matrix b)
+		{
+			if (a.Equals(b))
+			{
+				return false;
 			}
 
 			return true;
