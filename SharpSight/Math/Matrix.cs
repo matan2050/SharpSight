@@ -326,6 +326,18 @@ namespace SharpSight.Math
 				this.dimensions = value;
 			}
 		}
+
+		public double[,] MatrixData
+		{
+			get
+			{
+				return matrixData;
+			}
+			set
+			{
+				matrixData = value;
+			}
+		}
 		#endregion
 
 
