@@ -54,6 +54,13 @@ namespace SharpSight.CameraModel
 
 			return pixel;
 		}
+
+
+		public override Vector PixelToVector(Vector pixel)
+		{
+			throw new NotImplementedException();
+			// TODO: REQUIRES IMPLEMENTATION OF MATRIX INVERSION (KR^-1)
+		}
 		#endregion
 	}
 }
