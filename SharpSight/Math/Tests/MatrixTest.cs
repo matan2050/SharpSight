@@ -11,6 +11,25 @@ namespace SharpSight.Math.Tests
 {
 	public static class MatrixTest
 	{
+		public static bool TestConstructors()
+		{
+			uint nRows = 3;
+			uint nCols = 2;
+			Matrix a = new Matrix(nRows,nCols);
+			if ((a.Dimensions[0] != nRows) || (a.Dimensions[1] != nCols))
+			{
+				return false;
+			}
+
+			Matrix b = new Matrix(a);
+			if ((a.Dimensions[0] != b.Dimensions[0]) || (a.Dimensions[1] != b.Dimensions[1]))
+			{
+				return false;
+			}
+
+			return true;
+		}
+
 		public static void TestSpecialMatrices()
 		{
 			Matrix a = new Matrix(3,3);
