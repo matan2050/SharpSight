@@ -20,6 +20,7 @@ namespace SharpSight.Math
 		public Matrix(uint nRows, uint nCols)
 		{
 			dimensions = new uint[2];
+
 			dimensions[0] = nRows;
 			dimensions[1] = nCols;
 
@@ -181,7 +182,8 @@ namespace SharpSight.Math
 			{
 				for (uint j=0; j<first.dimensions[1]; j++)
 				{
-					returnedMatrix.Element(i, j, first.Element(i, j) + second.Element(i, j)); 
+					returnedMatrix.Element(i, j, 
+						first.Element(i, j) + second.Element(i, j)); 
 				}
 			}
 			return returnedMatrix;
@@ -194,7 +196,8 @@ namespace SharpSight.Math
 			{
 				for (uint j = 0; j < mat.dimensions[1]; j++)
 				{
-					returnedMat.Element(i, j, mat.Element(i, j) + scalar);
+					returnedMat.Element(i, j, 
+						mat.Element(i, j) + scalar);
 				}
 			}
 			return returnedMat;
@@ -215,7 +218,8 @@ namespace SharpSight.Math
 			{
 				for (uint j = 0; j<second.dimensions[1]; j++)
 				{
-					second.Element(i, j, -second.Element(i, j));
+					second.Element(i, j, 
+						-second.Element(i, j));
 				}
 			}
 			return first + second;
@@ -229,7 +233,8 @@ namespace SharpSight.Math
 			{
 				for (uint j = 0; j < mat.dimensions[1]; j++)
 				{
-					returnedMat.Element(i, j, scalar - mat.Element(i, j));
+					returnedMat.Element(i, j,
+						scalar - mat.Element(i, j));
 				}
 			}
 
@@ -245,25 +250,26 @@ namespace SharpSight.Math
 			return returnedMat;
 		}
 
-		public static Matrix operator *(Matrix first, Matrix second)
+		public static Matrix operator *(Matrix a, Matrix b)
 		{
-			if (first.dimensions[1] != second.dimensions[0])
+			if (a.dimensions[1] != b.dimensions[0])
 				throw new Exception();
 
-			Matrix		returnedMatrix		= new Matrix(first.dimensions[0], second.dimensions[1]);
+			Matrix product = new Matrix(a.dimensions[0], b.dimensions[1]);
 
-			for (uint i = 0; i < returnedMatrix.dimensions[0]; i++)
+			for (uint i = 0; i < product.dimensions[0]; i++)
 			{
-				for (uint j = 0; j < returnedMatrix.dimensions[1]; j++)
+				for (uint j = 0; j < product.dimensions[1]; j++)
 				{
-					for (uint k = 0; k < first.dimensions[1]; k++)
+					for (uint k = 0; k < a.dimensions[1]; k++)
 					{
-						returnedMatrix.Element(i, j, returnedMatrix.Element(i, j) + first.Element(i, k) * second.Element(k, j));
+						product.Element(i, j,
+							product.Element(i, j) + a.Element(i, k) * b.Element(k, j));
 					}
 				}
 			}
 
-			return returnedMatrix;
+			return product;
 		}
 
 		public static Matrix operator *(double scalar, Matrix mat)
@@ -309,14 +315,25 @@ namespace SharpSight.Math
 
 
 		#region PROPERTIES
-
+		public uint[] Dimensions
+		{
+			get
+			{
+				return this.dimensions;
+			}
+			set
+			{
+				this.dimensions = value;
+			}
+		}
 		#endregion
 
 
 		#region PRIVATE_METHODS
 		private static bool CheckPairDimensions(Matrix a, Matrix b)
 		{ 
-			if ((a.dimensions[0] != b.dimensions[0]) || (a.dimensions[1] != b.dimensions[1]))
+			if ((a.dimensions[0] != b.dimensions[0]) 
+				|| (a.dimensions[1] != b.dimensions[1]))
 			{
 				return false;
 			}
