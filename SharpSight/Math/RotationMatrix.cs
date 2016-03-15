@@ -26,39 +26,36 @@ namespace SharpSight.Math
 			Matrix	Ry	= new Matrix(3,3);
 			Matrix	Rz	= new Matrix(3,3);
 
-			Rx.Element(0, 0, 1);
-			Rx.Element(0, 1, 0);
-			Rx.Element(0, 2, 0);
-			Rx.Element(1, 0, 0);
+			Rx.Eye();
 			Rx.Element(1, 1, System.Math.Cos(x));
 			Rx.Element(1, 2, -System.Math.Sin(x));
-			Rx.Element(2, 0, 0);
 			Rx.Element(2, 1, System.Math.Sin(x));
 			Rx.Element(2, 2, System.Math.Cos(x));
 
+			Ry.Eye();
 			Ry.Element(0, 0, System.Math.Cos(y));
-			Ry.Element(0, 1, 0);
 			Ry.Element(0, 2, System.Math.Sin(y));
-			Ry.Element(1, 0, 0);
-			Ry.Element(1, 1, 1);
-			Ry.Element(1, 2, 0);
 			Ry.Element(2, 0, -System.Math.Sin(x));
-			Ry.Element(2, 1, 0);
 			Ry.Element(2, 2, System.Math.Cos(x));
 
+			Rz.Eye();
 			Rz.Element(0, 0, System.Math.Cos(z));
 			Rz.Element(0, 1, -System.Math.Sin(z));
-			Rz.Element(0, 2, 0);
 			Rz.Element(1, 0, System.Math.Sin(z));
 			Rz.Element(1, 1, System.Math.Cos(z));
-			Rz.Element(1, 2, 0);
-			Rz.Element(2, 0, 0);
-			Rz.Element(2, 1, 0);
-			Rz.Element(2, 2, 1);
 
 			Matrix R = Rx*Ry*Rz;
 			MatrixData = R.MatrixData;
 		}
+		#endregion
+
+
+		#region METHODS
+		/*public Matrix ToHomogenous()
+		{
+			Matrix homogenousEye = new Matrix(4,4);
+
+		}*/
 		#endregion
 	}
 }
