@@ -45,7 +45,7 @@ namespace SharpSight.Math
 
 
 		#region ACCESS_METHODS
-		public void Element(uint row, uint col, double value)
+		public virtual void Element(uint row, uint col, double value)
 		{
 			if ((row < 0) || (row > dimensions[0]) || (col < 0) || (col > dimensions[1]))
 			{
@@ -55,7 +55,7 @@ namespace SharpSight.Math
 			matrixData[row, col] = value;
 		}
 
-		public double Element(uint row, uint col)
+		public virtual double Element(uint row, uint col)
 		{
 			return matrixData[row, col];
 		}
@@ -253,7 +253,7 @@ namespace SharpSight.Math
 		public static Matrix operator *(Matrix a, Matrix b)
 		{
 			if (a.dimensions[1] != b.dimensions[0])
-				throw new Exception();
+				throw new Exception();					// TODO: implement unique exception
 
 			Matrix product = new Matrix(a.dimensions[0], b.dimensions[1]);
 

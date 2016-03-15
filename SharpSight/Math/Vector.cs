@@ -8,8 +8,39 @@ namespace SharpSight.Math
 {
 	public class Vector : Matrix
 	{
+		#region CONSTRUCTOR
 		public Vector(uint numElements) : base(numElements, 1)
 		{
 		}
+
+		public Vector(Matrix mat) : base(mat.Dimensions[0], 1)
+		{
+		}
+		#endregion
+
+
+		#region ACCESS_METHODS
+		public double Element(uint row)
+		{
+			return base.Element(row, 0);
+		}
+
+		public void Element(uint row, double value)
+		{
+			base.Element(row, 0, value);
+		}
+		#endregion
+
+
+		#region OPERATOR_OVERLOADS
+		public static Vector operator*(Matrix mat, Vector vec)
+		{
+			Matrix		vecAsMatrix = new Matrix(vec);
+			Vector		product		= new Vector(mat.Dimensions[0]);
+
+			Matrix productAsMatrix = mat*vecAsMatrix;
+			product = (Vector)productAsMatrix;
+		}
+		#endregion
 	}
 }
