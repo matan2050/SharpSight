@@ -37,6 +37,13 @@ namespace SharpSight.Math.Tests
 				return false;
 			}
 
+			Matrix c = new Matrix(5,5, "Ones");
+			Console.WriteLine(c.ToString());
+			Matrix d = new Matrix(4,7, "Zeros");
+			Console.WriteLine(d.ToString());
+			Matrix e = new Matrix(5,5, "Eye");
+			Console.WriteLine(e.ToString());
+
 			return true;
 		}
 
