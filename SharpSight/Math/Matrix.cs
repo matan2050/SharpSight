@@ -43,6 +43,30 @@ namespace SharpSight.Math
 				}
 			}
 		}
+
+		// special case matrix
+		public Matrix(uint nRows, uint nCols, string type)
+		{
+			dimensions = new uint[2];
+			dimensions[0] = nRows;
+			dimensions[1] = nCols;
+			matrixData = new double[dimensions[0], dimensions[1]];
+
+			switch (type)
+			{
+				case "Ones":
+					Ones();
+					break;
+				case "Zeros":
+					Zeros();
+					break;
+				case "Eye":
+					Eye();
+					break;
+			}
+
+
+		}
 		#endregion
 
 
@@ -114,6 +138,37 @@ namespace SharpSight.Math
 			}
 
 			return transposed;
+		}
+
+		public double Norm()
+		{
+			double squareSum = 0;
+
+			for (uint i = 0; i < dimensions[0]; i++)
+			{
+				for (uint j = 0; j < dimensions[1]; j++)
+				{
+					squareSum += System.Math.Pow(Element(i, j), 2);
+				}
+			}
+			return System.Math.Sqrt(squareSum);
+		}
+
+		public Matrix Normalize()
+		{
+			Matrix	normalized	= new Matrix(dimensions[0], dimensions[1]);
+			double	matrixNorm	= Norm();
+
+			for (uint i = 0; i < dimensions[0]; i++)
+			{
+				for (uint j = 0; j < dimensions[1]; j++)
+				{
+					normalized.Element(i, j,
+						Element(i, j) / matrixNorm);
+				}
+			}
+
+			return normalized;
 		}
 
 		public Matrix Concat(Matrix b, bool horizontal)
