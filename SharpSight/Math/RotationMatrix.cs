@@ -108,6 +108,25 @@ namespace SharpSight.Math
 			Matrix homogenousEye = new Matrix(4,4);
 
 		}*/
+
+		/// <summary>
+		/// Conversion from current rotation matrix to euler angles
+		/// </summary>
+		/// <returns>a vector of three euler angles</returns>
+		public Vector ToEuler()		 // TODO CHECK CORRECTNESS OF ALGORITHM
+		{
+			Vector euler = new Vector(3);
+
+			double x = System.Math.Atan2(Element(2,1), Element(2,2));
+			double y = -System.Math.Atan(Element(2,0)/System.Math.Sqrt(1-System.Math.Pow(Element(2,0),2)));
+			double z = System.Math.Atan2(Element(1,0), Element(0,0));
+
+			euler.Element(0, x);
+			euler.Element(1, y);
+			euler.Element(2, z);
+
+			return euler;
+		}
 		#endregion
 	}
 }
