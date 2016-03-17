@@ -31,18 +31,24 @@ namespace SharpSight.CameraModel
 			R = _R;
 			C = _C;
 
-			Matrix eye = new Matrix(3,3);
-			eye.Eye();
+			Matrix eye = new Matrix(3,3, "Eye");
 			P = K * R * eye.Concat((-1) * C, true);
 		}
 		#endregion
 
 
 		#region METHODS
+		/// <summary>
+		/// Projects 3D point to 2D point in image plane
+		/// </summary>
+		/// <param name="point">3D point in cartesian coordinates</param>
+		/// <returns></returns>
 		public override Vector PointToPixel(Vector point)
 		{
 			Vector		pixel			= new Vector(2);
 			Vector		pixelHomogenous = new Vector(3);
+
+			// if input point is non-homogenous
 
 			pixelHomogenous = P * point;
 
