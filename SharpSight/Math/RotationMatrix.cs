@@ -103,11 +103,14 @@ namespace SharpSight.Math
 
 
 		#region METHODS
-		/*public Matrix ToHomogenous()
+		/// <summary>
+		/// Copies the 3x3 rotation matrix to a 4x4 homogenous rotation matrix
+		/// </summary>
+		/// <returns>4x4 homogenous rotation matrix</returns>
+		public Matrix ToHomogenous()
 		{
-			Matrix homogenousEye = new Matrix(4,4);
-
-		}*/
+			return new Matrix(this, 0, 0, 4, 4);
+		}
 
 		/// <summary>
 		/// Conversion from current rotation matrix to euler angles
