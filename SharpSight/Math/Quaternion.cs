@@ -13,6 +13,11 @@ namespace SharpSight.Math
 
 
 		#region CONSTRUCTOR
+		/// <summary>
+		/// Constructor from a vector and a rotation relative to that vector
+		/// </summary>
+		/// <param name="axis">3 element vector</param>
+		/// <param name="angle">rotation angle</param>
 		public Quaternion(Vector axis, double angle) : base(4)
 		{
 			Vector axisNorm = (Vector)axis.Normalize();
@@ -25,12 +30,19 @@ namespace SharpSight.Math
 				axis.Element(2) * System.Math.Sin(angle / 2));
 		}
 
+
+		/// <summary>
+		/// Default empty quaternion ctor
+		/// </summary>
 		public Quaternion() : base(4)
 		{
 		}
 		#endregion
 
-
+		/// <summary>
+		/// Quaternion ctor from 3 element [0, vec] or 4 element vector [vec]
+		/// </summary>
+		/// <param name="vec">3 or 4 element vector</param>
 		public Quaternion(Vector vec) : base(4)
 		{
 			if (vec.Dimensions[0] == 3)
@@ -57,6 +69,10 @@ namespace SharpSight.Math
 
 
 		#region METHODS
+		/// <summary>
+		/// Generate quaternion conjugate
+		/// </summary>
+		/// <returns>conjugate Quaternion</returns>
 		public Quaternion Conjugate()
 		{
 			Quaternion conj = new Quaternion();
@@ -69,6 +85,11 @@ namespace SharpSight.Math
 			return conj;
 		}
 
+		/// <summary>
+		/// Rotate using quaternion
+		/// </summary>
+		/// <param name="toRotate">vector to rotate</param>
+		/// <returns>rotated vector</returns>
 		public Vector Rotate(Vector toRotate)
 		{
 			Quaternion  vecAsQuaternion = new Quaternion(toRotate);
@@ -81,6 +102,12 @@ namespace SharpSight.Math
 
 
 		#region OPERATOR_OVERLOADS
+		/// <summary>
+		/// Quaternion multiplication overload
+		/// </summary>
+		/// <param name="a">left hand side Quaternion</param>
+		/// <param name="b">right hand side Quaternion</param>
+		/// <returns>product Quaternion</returns>
 		public static Quaternion operator *(Quaternion a, Quaternion b)
 		{
 			Quaternion product = new Quaternion();
@@ -105,3 +132,4 @@ namespace SharpSight.Math
 		#endregion
 	}
 }
+									
