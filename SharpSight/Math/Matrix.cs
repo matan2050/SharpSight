@@ -122,6 +122,9 @@ namespace SharpSight.Math
 
 
 		#region METHODS
+		/// <summary>
+		/// Initializes all matrix elements to 1
+		/// </summary>
 		public void Ones()
 		{
 			for (uint i = 0; i < dimensions[0]; i++)
@@ -133,6 +136,9 @@ namespace SharpSight.Math
 			}
 		}
 
+		/// <summary>
+		/// Initializes the matrix as an identity matrix if square dimensions
+		/// </summary>
 		public void Eye()
 		{
 			for (uint i = 0; i<dimensions[0]; i++)
@@ -147,6 +153,9 @@ namespace SharpSight.Math
 			}
 		}
 
+		/// <summary>
+		/// Initializes all matrix elements to zeros
+		/// </summary>
 		public void Zeros()
 		{
 			for (uint i = 0; i < dimensions[0]; i++)
@@ -158,6 +167,10 @@ namespace SharpSight.Math
 			}
 		}
 
+		/// <summary>
+		/// Transposes the matrix
+		/// </summary>
+		/// <returns>transposed matrix</returns>
 		public Matrix Transpose()
 		{
 			Matrix transposed = new Matrix(this.dimensions[1], this.dimensions[0]);
@@ -173,6 +186,10 @@ namespace SharpSight.Math
 			return transposed;
 		}
 
+		/// <summary>
+		/// Returns matrix magnitude
+		/// </summary>
+		/// <returns>matrix norm</returns>
 		public double Norm()
 		{
 			double squareSum = 0;
@@ -186,7 +203,12 @@ namespace SharpSight.Math
 			}
 			return System.Math.Sqrt(squareSum);
 		}
-
+		 
+		/// <summary>
+		/// Returns a normalized matrix from current 
+		/// (all elements divided by matrix magnitude)
+		/// </summary>
+		/// <returns>normalized matrix</returns>
 		public Matrix Normalize()
 		{
 			Matrix	normalized	= new Matrix(dimensions[0], dimensions[1]);
@@ -203,7 +225,30 @@ namespace SharpSight.Math
 
 			return normalized;
 		}
+		
+		/// <summary>
+		/// Returns diagonal elements in the matrix
+		/// </summary>
+		/// <returns>vector that represents the matrix diagonal elements</returns>
+		public Vector Diag()
+		{
+			if (dimensions[0] != dimensions[1])
+				throw new Exception();		 // TODO - IMPLEMENT SPECIFIC EXCEPTION
 
+			Vector diagonal = new Vector(dimensions[0]);
+
+			for (uint i = 0; i < dimensions[0]; i++)
+				diagonal.Element(i, Element(i, i));
+
+			return diagonal;
+		}
+
+		/// <summary>
+		/// Concatenates two matrices if dimensions agree
+		/// </summary>
+		/// <param name="b">the matrix to concatenate to current matrix</param>
+		/// <param name="horizontal">flag to indicate horizontal concatenation</param>
+		/// <returns>concatenated matrix</returns>
 		public Matrix Concat(Matrix b, bool horizontal)
 		{
 			Matrix returnedMat = new Matrix(0,0);
@@ -232,6 +277,10 @@ namespace SharpSight.Math
 			return returnedMat;
 		}
 
+		/// <summary>
+		/// ToString override method
+		/// </summary>
+		/// <returns>string representing matrix</returns>
 		public override string ToString()
 		{
 			string returnedString = "[";
@@ -452,6 +501,12 @@ namespace SharpSight.Math
 
 
 		#region PRIVATE_METHODS
+		/// <summary>
+		/// method to check if two matrices have identical dimensions
+		/// </summary>
+		/// <param name="a">left hand side matrix in comparison</param>
+		/// <param name="b">right hand side matrix in comparison</param>
+		/// <returns>indication if identical</returns>
 		private static bool CheckPairDimensions(Matrix a, Matrix b)
 		{ 
 			if ((a.dimensions[0] != b.dimensions[0]) 

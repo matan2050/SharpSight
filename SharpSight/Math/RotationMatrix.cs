@@ -8,7 +8,7 @@ namespace SharpSight.Math
 {
 	public class RotationMatrix : Matrix
 	{
-		#region FIELDDS
+		#region FIELDS
 		private     double      x;
 		private     double      y;
 		private     double      z;
