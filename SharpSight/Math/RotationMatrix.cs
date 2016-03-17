@@ -16,6 +16,12 @@ namespace SharpSight.Math
 
 
 		#region CONSTRUCTORS
+		/// <summary>
+		/// Euler angles based constructor 
+		/// </summary>
+		/// <param name="_x">rotation relative to x axis</param>
+		/// <param name="_y">rotation relative to y axis</param>
+		/// <param name="_z">rotation relative to z axis</param>
 		public RotationMatrix(double _x, double _y, double _z) : base(3,3)
 		{
 			x = _x;
@@ -46,6 +52,52 @@ namespace SharpSight.Math
 
 			Matrix R = Rx*Ry*Rz;
 			MatrixData = R.MatrixData;
+		}
+
+
+		/// <summary>
+		/// Quaternion based constructor
+		/// </summary>
+		/// <param name="q">rotation represented by quaternion</param>
+		public RotationMatrix(Quaternion q) : base(3,3)
+		{
+			Element(0, 0,
+				2 * (System.Math.Pow(q.Element(0), 2)) - 1 + 
+				2 * (System.Math.Pow(q.Element(1), 2)));
+
+			Element(0, 1,
+				2 * (q.Element(1) * q.Element(2) +
+				q.Element(0) * q.Element(3)));
+
+			Element(0, 2,
+				2 * (q.Element(1) * q.Element(3) -
+				q.Element(0) * q.Element(2)));
+
+
+			Element(1, 0,
+				2 * (q.Element(1) * q.Element(2) -
+				q.Element(0) * q.Element(3)));
+
+			Element(1, 1,
+				 2 * (System.Math.Pow(q.Element(0), 2)) +
+				 2 * (System.Math.Pow(q.Element(2), 2)));
+
+			Element(1, 2,
+				2 * (q.Element(2) * q.Element(3) +
+				q.Element(0) * q.Element(1)));
+
+
+			Element(2, 0,
+				2 * (q.Element(1) * q.Element(3) +
+				q.Element(0) * q.Element(2)));
+
+			Element(2, 1,
+				2 * (q.Element(2) * q.Element(3) -
+				q.Element(0) * q.Element(1)));
+
+			Element(2, 2,
+				2 * System.Math.Pow(q.Element(0), 2) - 1 +
+				2 * System.Math.Pow(q.Element(3), 2));
 		}
 		#endregion
 
