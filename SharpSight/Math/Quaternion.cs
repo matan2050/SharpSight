@@ -57,9 +57,14 @@ namespace SharpSight.Math
 
 
 		#region METHODS
-		public Quaternion Conjugate()  // TODO - IMPLEMENT QUATERNION CONJUGATE
+		public Quaternion Conjugate()
 		{
 			Quaternion conj = new Quaternion();
+
+			conj.Element(0, Element(0));
+			conj.Element(1, -Element(1));
+			conj.Element(2, -Element(2));
+			conj.Element(3, -Element(3));
 
 			return conj;
 		}
