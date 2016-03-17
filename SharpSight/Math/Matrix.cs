@@ -44,6 +44,39 @@ namespace SharpSight.Math
 			}
 		}
 
+		// matrix expansion ctor
+		public Matrix(Matrix matToExpand, uint rowPos, uint colPos, uint nRows, uint nCols)
+		{
+			dimensions = new uint[2];
+			dimensions[0] = nRows;
+			dimensions[1] = nCols;
+			matrixData = new double[dimensions[0], dimensions[1]];
+
+			// dimensions check
+			if ((nRows < rowPos + matToExpand.dimensions[0]) ||
+				(nCols < colPos + matToExpand.dimensions[1]))
+			{
+				throw new IndexOutOfRangeException();
+			}
+
+			for (uint i = 0; i < dimensions[0]; i++)
+			{
+				for (uint j = 0; j < dimensions[1]; j++)
+				{
+					if ((i >= rowPos) && (i < rowPos + matToExpand.dimensions[0]) &&
+						(j >= colPos) && (j < colPos + matToExpand.dimensions[1]))
+					{
+						Element(i, j, matToExpand.Element(i - rowPos, j - colPos));
+					}
+					else
+					{
+						Element(i, j, 0);
+					}
+				}
+			}
+		}
+
+
 		// special case matrix
 		public Matrix(uint nRows, uint nCols, string type)
 		{
