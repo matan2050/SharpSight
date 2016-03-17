@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SharpSight.Exceptions;
+
 namespace SharpSight.Math
 {
 	public class Matrix
@@ -314,7 +316,7 @@ namespace SharpSight.Math
 		{
 			// dimensions check
 			if (!CheckPairDimensions(first, second))
-				throw new Exception();	// TODO: replace with specific exceptions
+				throw new MatrixDimensionMismatchException();
 
 			Matrix returnedMatrix = new Matrix(first.dimensions[0], first.dimensions[1]);
 			for (uint i=0; i<first.dimensions[0]; i++)
@@ -351,7 +353,7 @@ namespace SharpSight.Math
 		{
 			// dimensions check
 			if (!CheckPairDimensions(first, second))
-				throw new Exception();  // TODO: replace with specific exceptions
+				throw new MatrixDimensionMismatchException();
 
 			for (uint i = 0; i<second.dimensions[0]; i++)
 			{
@@ -392,7 +394,7 @@ namespace SharpSight.Math
 		public static Matrix operator *(Matrix a, Matrix b)
 		{
 			if (a.dimensions[1] != b.dimensions[0])
-				throw new Exception();					// TODO: implement unique exception
+				throw new MatrixDimensionMismatchException();
 
 			Matrix product = new Matrix(a.dimensions[0], b.dimensions[1]);
 
