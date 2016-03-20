@@ -7,9 +7,9 @@ statistical and physical backbone.
 
 Roadmap:  
   
-v.1  
+v 0.1  
 Mathematical data types (Matrix, vector, quaternion, etc)  
 Numerical analysis functions (prerequisits to matrix inversion)  
-Basic pinhole camera model
-
-
+Basic pinhole camera model  
+Ray intersection class  
+Distortion implementation into pinhole model
