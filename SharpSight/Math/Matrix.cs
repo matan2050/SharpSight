@@ -246,6 +246,53 @@ namespace SharpSight.Math
 		}
 
 		/// <summary>
+		/// Perform elementary row replacement operation
+		/// </summary>
+		/// <param name="rowA">first row for replacement</param>
+		/// <param name="rowB">second row for replacement</param>
+		public void InterchangeRow(uint rowA, uint rowB)
+		{
+			// checking that row indices are within matrix borders
+			if ((rowA > dimensions[0]) || (rowA < 0) ||
+				(rowB > dimensions[0]) || (rowB < 0))
+			{
+				throw new IndexOutOfRangeException();
+			}
+
+			double[] tempRow = new double[this.dimensions[1]];
+
+			// save rowA in temp array, 
+			// and simultaneusly replace element in rowA
+			for (uint i = 0; i < dimensions[1]; i++)
+			{
+				tempRow[i] = this.Element(rowA, i);
+				this.Element(rowA, i, 
+					this.Element(rowB, i));
+			}
+
+			// replace elements in rowB
+			for (uint i = 0; i < dimensions[1]; i++)
+			{
+				this.Element(rowB, i, 
+					tempRow[i]);
+			}
+		}
+
+		/// <summary>
+		/// Replace row with row multiplied by 'scalar'
+		/// </summary>
+		/// <param name="row">row index</param>
+		/// <param name="scalar">scalar to multiply row with</param>
+		public void ScaleRow(uint row, double scalar)
+		{
+			for (uint i = 0; i < dimensions[1]; i++)
+			{
+				this.Element(row, i,
+					scalar * this.Element(row, i));
+			}
+		}
+
+		/// <summary>
 		/// Concatenates two matrices if dimensions agree
 		/// </summary>
 		/// <param name="b">the matrix to concatenate to current matrix</param>
