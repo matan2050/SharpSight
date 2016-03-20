@@ -123,7 +123,7 @@ namespace SharpSight.Math
 		#endregion
 
 
-		#region METHODS
+		#region INITIALIZATION_METHODS
 		/// <summary>
 		/// Initializes all matrix elements to 1
 		/// </summary>
@@ -131,7 +131,7 @@ namespace SharpSight.Math
 		{
 			for (uint i = 0; i < dimensions[0]; i++)
 			{
-				for (uint j = 0; j< dimensions[1]; j++)
+				for (uint j = 0; j < dimensions[1]; j++)
 				{
 					Element(i, j, 1);
 				}
@@ -143,11 +143,11 @@ namespace SharpSight.Math
 		/// </summary>
 		public void Eye()
 		{
-			for (uint i = 0; i<dimensions[0]; i++)
+			for (uint i = 0; i < dimensions[0]; i++)
 			{
-				for (uint j = 0; j<dimensions[1]; j++)
+				for (uint j = 0; j < dimensions[1]; j++)
 				{
-					if (i==j)
+					if (i == j)
 					{
 						Element(i, j, 1);
 					}
@@ -168,7 +168,107 @@ namespace SharpSight.Math
 				}
 			}
 		}
+		#endregion
 
+
+		#region ROW_OPERATIONS
+		/// <summary>
+		/// Perform elementary row replacement operation
+		/// </summary>
+		/// <param name="rowA">first row for replacement</param>
+		/// <param name="rowB">second row for replacement</param>
+		public void InterchangeRow(uint rowA, uint rowB)
+		{
+			// checking that row indices are within matrix borders
+			if ((rowA > dimensions[0]) || (rowA < 0) ||
+				(rowB > dimensions[0]) || (rowB < 0))
+			{
+				throw new IndexOutOfRangeException();
+			}
+
+			// checking if rowA and rowB are the same row
+			if (rowA == rowB)
+				return;
+
+			double[] tempRow = new double[this.dimensions[1]];
+
+			// save rowA in temp array, 
+			// and simultaneusly replace element in rowA
+			for (uint i = 0; i < dimensions[1]; i++)
+			{
+				tempRow[i] = this.Element(rowA, i);
+				this.Element(rowA, i,
+					this.Element(rowB, i));
+			}
+
+			// replace elements in rowB
+			for (uint i = 0; i < dimensions[1]; i++)
+			{
+				this.Element(rowB, i,
+					tempRow[i]);
+			}
+		}
+
+		/// <summary>
+		/// Replace row with row multiplied by 'scalar'
+		/// </summary>
+		/// <param name="row">row index</param>
+		/// <param name="scalar">scalar to multiply row with</param>
+		public void ScaleRow(uint row, double scalar)
+		{
+			for (uint i = 0; i < dimensions[1]; i++)
+			{
+				this.Element(row, i,
+					scalar * this.Element(row, i));
+			}
+		}
+
+		/// <summary>
+		/// Replace row with sum of rowA and scalar times rowB
+		/// </summary>
+		/// <param name="rowA">row which values are going to change</param>
+		/// <param name="rowB">row that will be multiplied by scalar for summation with rowA</param>
+		/// <param name="scalar">scalar number</param>
+		public void ReplaceWithSum(uint rowA, uint rowB, double scalar)
+		{
+			// checking that row indices are within matrix borders
+			if ((rowA > dimensions[0]) || (rowA < 0) ||
+				(rowB > dimensions[0]) || (rowB < 0))
+			{
+				throw new IndexOutOfRangeException();
+			}
+
+			for (uint i = 0; i < this.dimensions[1]; i++)
+			{
+				Element(rowA, i,
+					Element(rowA, i) +
+					scalar * Element(rowB, i));
+			}
+		}
+
+		/// <summary>
+		/// Returns all indices of rows that have a non-zero
+		/// element in the column 'col'
+		/// </summary>
+		/// <param name="col">column position to check if element is non-zero</param>
+		/// <returns>list of rows that have non-zero element at 'col' column</returns>
+		public List<uint> IndexByFirstNonzeroElement(uint col)
+		{
+			List<uint> returnedIndices = new List<uint>();
+
+			for (uint i = 0; i < dimensions[0]; i++)
+			{
+				if (Element(i, col) != 0)
+				{
+					returnedIndices.Add(i);
+				}
+			}
+			return returnedIndices;
+		}
+		#endregion
+
+
+		#region METHODS
 		/// <summary>
 		/// Transposes the matrix
 		/// </summary>
@@ -186,6 +286,15 @@ namespace SharpSight.Math
 			}
 
 			return transposed;
+		}
+
+		/// <summary>
+		/// Determinant methods
+		/// </summary>
+		/// <returns>Matrix determinant</returns>
+		public double Det()
+		{
+			throw new NotImplementedException();		// TODO - IMPLEMENT
 		}
 
 		/// <summary>
@@ -243,53 +352,6 @@ namespace SharpSight.Math
 				diagonal.Element(i, Element(i, i));
 
 			return diagonal;
-		}
-
-		/// <summary>
-		/// Perform elementary row replacement operation
-		/// </summary>
-		/// <param name="rowA">first row for replacement</param>
-		/// <param name="rowB">second row for replacement</param>
-		public void InterchangeRow(uint rowA, uint rowB)
-		{
-			// checking that row indices are within matrix borders
-			if ((rowA > dimensions[0]) || (rowA < 0) ||
-				(rowB > dimensions[0]) || (rowB < 0))
-			{
-				throw new IndexOutOfRangeException();
-			}
-
-			double[] tempRow = new double[this.dimensions[1]];
-
-			// save rowA in temp array, 
-			// and simultaneusly replace element in rowA
-			for (uint i = 0; i < dimensions[1]; i++)
-			{
-				tempRow[i] = this.Element(rowA, i);
-				this.Element(rowA, i, 
-					this.Element(rowB, i));
-			}
-
-			// replace elements in rowB
-			for (uint i = 0; i < dimensions[1]; i++)
-			{
-				this.Element(rowB, i, 
-					tempRow[i]);
-			}
-		}
-
-		/// <summary>
-		/// Replace row with row multiplied by 'scalar'
-		/// </summary>
-		/// <param name="row">row index</param>
-		/// <param name="scalar">scalar to multiply row with</param>
-		public void ScaleRow(uint row, double scalar)
-		{
-			for (uint i = 0; i < dimensions[1]; i++)
-			{
-				this.Element(row, i,
-					scalar * this.Element(row, i));
-			}
 		}
 
 		/// <summary>
