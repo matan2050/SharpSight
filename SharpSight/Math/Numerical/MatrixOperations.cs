@@ -20,7 +20,19 @@ namespace SharpSight.Math.Numerical
 		{
 			Matrix echelonForm = new Matrix(A.Dimensions[0], A.Dimensions[1]);
 
+			// initially finding the row with first most
+			// non-zero element
+			List<uint> leadingNonZeroRows = new List<uint>();
+			for (uint i = 0; i < A.Dimensions[1]; i++)
+			{
+				leadingNonZeroRows = A.IndexByFirstNonzeroElement(i);
 
+				if (leadingNonZeroRows.Count != 0)
+					break;
+			}
+
+			// interchanging found row with first row
+			A.InterchangeRow(1, leadingNonZeroRows[0]);
 
 			return echelonForm;
 		}
