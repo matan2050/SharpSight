@@ -22,17 +22,31 @@ namespace SharpSight.Math.Numerical
 
 			// initially finding the row with first most
 			// non-zero element
-			List<uint> leadingNonZeroRows = new List<uint>();
+			List<uint>	leadingNonZeroRows			= new List<uint>();
+			uint		availableRowForIntechange	= 0;
+
 			for (uint i = 0; i < A.Dimensions[1]; i++)
 			{
 				leadingNonZeroRows = A.IndexByFirstNonzeroElement(i);
 
 				if (leadingNonZeroRows.Count != 0)
-					break;
-			}
+					continue;
 
-			// interchanging found row with first row
-			A.InterchangeRow(1, leadingNonZeroRows[0]);
+				// interchanging found row with first row
+				A.InterchangeRow(availableRowForIntechange, leadingNonZeroRows[0]);
+
+				// scale row so first element is 1	TODO - CHECK FOR SOLUTION WHEN SCALING FACTOR CLOSE TO 0
+				A.ScaleRow(availableRowForIntechange, 
+					A.Element(availableRowForIntechange, i));
+
+				for (uint j = 0; j < leadingNonZeroRows.Count; j++)
+				{
+					A.ReplaceWithSum(leadingNonZeroRows[(int)j], availableRowForIntechange,
+						-(A.Element(leadingNonZeroRows[(int)j], i)));
+				}
+
+				availableRowForIntechange++;
+			}
 
 			return echelonForm;
 		}
