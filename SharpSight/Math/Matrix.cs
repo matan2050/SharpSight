@@ -214,7 +214,7 @@ namespace SharpSight.Math
 		/// </summary>
 		/// <param name="row">row index</param>
 		/// <param name="scalar">scalar to multiply row with</param>
-		public void ScaleRow(uint row, double scalar)
+		public void MultiplyRowByScalar(uint row, double scalar)
 		{
 			for (uint i = 0; i < dimensions[1]; i++)
 			{
@@ -229,7 +229,7 @@ namespace SharpSight.Math
 		/// <param name="rowA">row which values are going to change</param>
 		/// <param name="rowB">row that will be multiplied by scalar for summation with rowA</param>
 		/// <param name="scalar">scalar number</param>
-		public void ReplaceWithSum(uint rowA, uint rowB, double scalar)
+		public void AddMultipliedRow(uint rowA, uint rowB, double scalar)
 		{
 			// checking that row indices are within matrix borders
 			if ((rowA > dimensions[0]) || (rowA < 0) ||
@@ -428,19 +428,75 @@ namespace SharpSight.Math
 
 
 		#region OPERATOR_OVERLOADS
-		public static Matrix operator +(Matrix first, Matrix second)
+		/// <summary>
+		/// Overload for square bracket index accessing - single element
+		/// </summary>
+		/// <param name="i">zero-based row index</param>
+		/// <param name="j">zero-based column index</param>
+		/// <returns></returns>
+		public double this[uint row, uint col]
+		{
+			get
+			{
+				if (!CheckMatrixAccessIndices(this, row, col))
+					throw new IndexOutOfRangeException();
+
+				return Element(row, col);
+			}
+			set
+			{
+				if (!CheckMatrixAccessIndices(this, row, col))
+					throw new IndexOutOfRangeException();
+				Element(row, col, value);
+			}
+		}
+
+		/// <summary>
+		/// Overload for square bracket index accessing - entire row
+		/// </summary>
+		/// <param name="row">zero-based row index</param>
+		/// <returns>row as vector</returns>
+		public Vector this[uint row]
+		{
+			get
+			{
+				if (!CheckMatrixAccessIndices(this, row))
+					throw new IndexOutOfRangeException();
+
+				Vector thisRow = new Vector(dimensions[1]);
+				
+				for (uint i = 0; i < dimensions[1]; i++)
+				{
+					thisRow.Element(i, 
+						this.Element(row, i));
+				}
+				return thisRow;
+			}
+			set
+			{
+				if (!CheckMatrixAccessIndices(this, row))
+					throw new IndexOutOfRangeException();
+
+				for (uint i = 0; i < dimensions[1]; i++)
+				{
+					Element(row, i, value.Element(i));
+				}
+			}
+		}
+
+		public static Matrix operator +(Matrix A, Matrix B)
 		{
 			// dimensions check
-			if (!CheckPairDimensions(first, second))
+			if (!CheckPairDimensions(A, B))
 				throw new MatrixDimensionMismatchException();
 
-			Matrix returnedMatrix = new Matrix(first.dimensions[0], first.dimensions[1]);
-			for (uint i=0; i<first.dimensions[0]; i++)
+			Matrix returnedMatrix = new Matrix(A.dimensions[0], A.dimensions[1]);
+			for (uint i=0; i<A.dimensions[0]; i++)
 			{
-				for (uint j=0; j<first.dimensions[1]; j++)
+				for (uint j=0; j<A.dimensions[1]; j++)
 				{
 					returnedMatrix.Element(i, j, 
-						first.Element(i, j) + second.Element(i, j)); 
+						A.Element(i, j) + B.Element(i, j)); 
 				}
 			}
 			return returnedMatrix;
@@ -465,21 +521,21 @@ namespace SharpSight.Math
 			return scalar + mat;
 		}
 
-		public static Matrix operator -(Matrix first, Matrix second)
+		public static Matrix operator -(Matrix A, Matrix B)
 		{
 			// dimensions check
-			if (!CheckPairDimensions(first, second))
+			if (!CheckPairDimensions(A, B))
 				throw new MatrixDimensionMismatchException();
 
-			for (uint i = 0; i<second.dimensions[0]; i++)
+			for (uint i = 0; i<B.dimensions[0]; i++)
 			{
-				for (uint j = 0; j<second.dimensions[1]; j++)
+				for (uint j = 0; j<B.dimensions[1]; j++)
 				{
-					second.Element(i, j, 
-						-second.Element(i, j));
+					B.Element(i, j, 
+						-B.Element(i, j));
 				}
 			}
-			return first + second;
+			return A + B;
 		}
 
 		public static Matrix operator -(double scalar, Matrix mat)
@@ -507,21 +563,21 @@ namespace SharpSight.Math
 			return returnedMat;
 		}
 
-		public static Matrix operator *(Matrix a, Matrix b)
+		public static Matrix operator *(Matrix A, Matrix B)
 		{
-			if (a.dimensions[1] != b.dimensions[0])
+			if (A.dimensions[1] != B.dimensions[0])
 				throw new MatrixDimensionMismatchException();
 
-			Matrix product = new Matrix(a.dimensions[0], b.dimensions[1]);
+			Matrix product = new Matrix(A.dimensions[0], B.dimensions[1]);
 
 			for (uint i = 0; i < product.dimensions[0]; i++)
 			{
 				for (uint j = 0; j < product.dimensions[1]; j++)
 				{
-					for (uint k = 0; k < a.dimensions[1]; k++)
+					for (uint k = 0; k < A.dimensions[1]; k++)
 					{
 						product.Element(i, j,
-							product.Element(i, j) + a.Element(i, k) * b.Element(k, j));
+							product.Element(i, j) + A.Element(i, k) * B.Element(k, j));
 					}
 				}
 			}
@@ -548,18 +604,24 @@ namespace SharpSight.Math
 			return scalar * mat;
 		}
 
-		public static bool Equals(Matrix a, Matrix b)
+		/// <summary>
+		/// Equality method oveloading
+		/// </summary>
+		/// <param name="A">first matrix</param>
+		/// <param name="B">second matrix</param>
+		/// <returns>true for equal, false for inequal</returns>
+		public static bool Equals(Matrix A, Matrix B)
 		{
-			if ((a.dimensions[0] != b.dimensions[0]) && (a.dimensions[1] != b.dimensions[1]))
+			if ((A.dimensions[0] != B.dimensions[0]) && (A.dimensions[1] != B.dimensions[1]))
 			{
 				return false;
 			}
 
-			for (uint i = 0; i < a.dimensions[0]; i++)
+			for (uint i = 0; i < A.dimensions[0]; i++)
 			{
-				for (uint j = 0; j < a.dimensions[1]; j++)
+				for (uint j = 0; j < A.dimensions[1]; j++)
 				{
-					if (a.Element(i, j) != b.Element(i, j))
+					if (A.Element(i, j) != B.Element(i, j))
 					{
 						return false;
 					}
@@ -569,9 +631,15 @@ namespace SharpSight.Math
 			return true;
 		}
 
-		public static bool operator ==(Matrix a, Matrix b)
+		/// <summary>
+		/// Equality operator oveloading
+		/// </summary>
+		/// <param name="A">first matrix</param>
+		/// <param name="B">second matrix</param>
+		/// <returns>true for equal, false for inequal</returns>
+		public static bool operator ==(Matrix A, Matrix B)
 		{
-			if (a.Equals(b))
+			if (A.Equals(B))
 			{
 				return true;
 			}
@@ -579,9 +647,15 @@ namespace SharpSight.Math
 			return false;
 		}
 
-		public static bool operator !=(Matrix a, Matrix b)
+		/// <summary>
+		/// Inequality operator oveloading
+		/// </summary>
+		/// <param name="A">first matrix</param>
+		/// <param name="B">second matrix</param>
+		/// <returns>true for inequal, false for equal</returns>
+		public static bool operator !=(Matrix A, Matrix B)
 		{
-			if (a.Equals(b))
+			if (A.Equals(B))
 			{
 				return false;
 			}
@@ -625,13 +699,32 @@ namespace SharpSight.Math
 		/// <param name="a">left hand side matrix in comparison</param>
 		/// <param name="b">right hand side matrix in comparison</param>
 		/// <returns>indication if identical</returns>
-		private static bool CheckPairDimensions(Matrix a, Matrix b)
+		private static bool CheckPairDimensions(Matrix A, Matrix B)
 		{ 
-			if ((a.dimensions[0] != b.dimensions[0]) 
-				|| (a.dimensions[1] != b.dimensions[1]))
+			if ((A.dimensions[0] != B.dimensions[0]) 
+				|| (A.dimensions[1] != B.dimensions[1]))
 			{
 				return false;
 			}
+			return true;
+		}
+
+		private static bool CheckMatrixAccessIndices(Matrix A, uint row, uint col)
+		{
+			// Making sure given row and col are valid
+			if ((row >= A.dimensions[0]) || (row < 0) ||
+				(col >= A.dimensions[1]) || (col < 0))
+				return false;
+
+			return true;
+		}
+
+		private static bool CheckMatrixAccessIndices(Matrix A, uint row)
+		{
+			// Making sure given row and col are valid
+			if ((row >= A.dimensions[0]) || (row < 0))
+				return false;
+
 			return true;
 		}
 		#endregion
