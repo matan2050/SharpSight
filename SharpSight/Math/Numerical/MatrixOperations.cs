@@ -16,9 +16,14 @@ namespace SharpSight.Math.Numerical
 		}
 
 
-		public static Matrix GaussJordan(Matrix A)
+		/// <summary>
+		/// Generate elementary matrix from matrix A
+		/// </summary>
+		/// <param name="A">matrix to apply row reduction</param>
+		/// <returns>elementary matrix based on A</returns>
+		public static Matrix GenerateElementaryMatrix(Matrix A)
 		{
-			Matrix echelonForm = new Matrix(A.Dimensions[0], A.Dimensions[1]);
+			Matrix elementary = new Matrix(A.Dimensions[0], A.Dimensions[1]);
 
 			// initially finding the row with first most
 			// non-zero element
@@ -48,7 +53,7 @@ namespace SharpSight.Math.Numerical
 				availableRowForIntechange++;
 			}
 
-			return echelonForm;
+			return elementary;
 		}
 	}
 }
