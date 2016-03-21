@@ -258,7 +258,14 @@ namespace SharpSight.Math
 
 			for (uint i = 0; i < dimensions[0]; i++)
 			{
-				if (Element(i, col) != 0)
+				bool preceedingNonZeroFlag = false;
+				for (uint j = col; col >= 0; col--)
+				{
+					if (Element(i, j) != 0)
+						preceedingNonZeroFlag = true;
+						break;
+				}
+				if ((Element(i, col) != 0) && (!preceedingNonZeroFlag))
 				{
 					returnedIndices.Add(i);
 				}
