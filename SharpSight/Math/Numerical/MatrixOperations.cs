@@ -8,6 +8,11 @@ namespace SharpSight.Math.Numerical
 {
 	public static class MatrixOperations
 	{
+		/// <summary>
+		/// Cholesky decomposition
+		/// </summary>
+		/// <param name="A">matrix to decompose</param>
+		/// <returns>upper triangular matrix returned from decomposition</returns>
 		public static Matrix Cholesky(Matrix A)
 		{
 			Matrix decomposed = new Matrix(A.Dimensions[0], A.Dimensions[1]);
@@ -41,12 +46,12 @@ namespace SharpSight.Math.Numerical
 				A.InterchangeRow(availableRowForIntechange, leadingNonZeroRows[0]);
 
 				// scale row so first element is 1	TODO - CHECK FOR SOLUTION WHEN SCALING FACTOR CLOSE TO 0
-				A.ScaleRow(availableRowForIntechange, 
+				A.MultiplyRowByScalar(availableRowForIntechange, 
 					A.Element(availableRowForIntechange, i));
 
 				for (uint j = 0; j < leadingNonZeroRows.Count; j++)
 				{
-					A.ReplaceWithSum(leadingNonZeroRows[(int)j], availableRowForIntechange,
+					A.AddMultipliedRow(leadingNonZeroRows[(int)j], availableRowForIntechange,
 						-(A.Element(leadingNonZeroRows[(int)j], i)));
 				}
 

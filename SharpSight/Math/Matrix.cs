@@ -106,6 +106,12 @@ namespace SharpSight.Math
 
 
 		#region ACCESS_METHODS
+		/// <summary>
+		/// Assigns value to a certain cell in matrix
+		/// </summary>
+		/// <param name="row">assigned cell row index</param>
+		/// <param name="col">assigned cell col index</param>
+		/// <param name="value">assigned cell value</param>
 		public virtual void Element(uint row, uint col, double value)
 		{
 			if ((row < 0) || (row > dimensions[0]) || (col < 0) || (col > dimensions[1]))
@@ -116,9 +122,71 @@ namespace SharpSight.Math
 			matrixData[row, col] = value;
 		}
 
+		/// <summary>
+		/// Returns value currently in cell represented by [row,col]
+		/// </summary>
+		/// <param name="row">cell row index</param>
+		/// <param name="col">cell col index</param>
+		/// <returns>value in queryied cell</returns>
 		public virtual double Element(uint row, uint col)
 		{
 			return matrixData[row, col];
+		}
+
+		/// <summary>
+		/// Overload for square bracket index accessing - single element
+		/// </summary>
+		/// <param name="i">zero-based row index</param>
+		/// <param name="j">zero-based column index</param>
+		/// <returns></returns>
+		public double this[uint row, uint col]
+		{
+			get
+			{
+				if (!CheckMatrixAccessIndices(this, row, col))
+					throw new IndexOutOfRangeException();
+
+				return Element(row, col);
+			}
+			set
+			{
+				if (!CheckMatrixAccessIndices(this, row, col))
+					throw new IndexOutOfRangeException();
+				Element(row, col, value);
+			}
+		}
+
+		/// <summary>
+		/// Overload for square bracket index accessing - entire row
+		/// </summary>
+		/// <param name="row">zero-based row index</param>
+		/// <returns>row as vector</returns>
+		public Vector this[uint row]
+		{
+			get
+			{
+				if (!CheckMatrixAccessIndices(this, row))
+					throw new IndexOutOfRangeException();
+
+				Vector thisRow = new Vector(dimensions[1]);
+
+				for (uint i = 0; i < dimensions[1]; i++)
+				{
+					thisRow.Element(i,
+						this.Element(row, i));
+				}
+				return thisRow;
+			}
+			set
+			{
+				if (!CheckMatrixAccessIndices(this, row))
+					throw new IndexOutOfRangeException();
+
+				for (uint i = 0; i < dimensions[1]; i++)
+				{
+					Element(row, i, value.Element(i));
+				}
+			}
 		}
 		#endregion
 
@@ -429,61 +497,11 @@ namespace SharpSight.Math
 
 		#region OPERATOR_OVERLOADS
 		/// <summary>
-		/// Overload for square bracket index accessing - single element
+		/// Addition operator
 		/// </summary>
-		/// <param name="i">zero-based row index</param>
-		/// <param name="j">zero-based column index</param>
-		/// <returns></returns>
-		public double this[uint row, uint col]
-		{
-			get
-			{
-				if (!CheckMatrixAccessIndices(this, row, col))
-					throw new IndexOutOfRangeException();
-
-				return Element(row, col);
-			}
-			set
-			{
-				if (!CheckMatrixAccessIndices(this, row, col))
-					throw new IndexOutOfRangeException();
-				Element(row, col, value);
-			}
-		}
-
-		/// <summary>
-		/// Overload for square bracket index accessing - entire row
-		/// </summary>
-		/// <param name="row">zero-based row index</param>
-		/// <returns>row as vector</returns>
-		public Vector this[uint row]
-		{
-			get
-			{
-				if (!CheckMatrixAccessIndices(this, row))
-					throw new IndexOutOfRangeException();
-
-				Vector thisRow = new Vector(dimensions[1]);
-				
-				for (uint i = 0; i < dimensions[1]; i++)
-				{
-					thisRow.Element(i, 
-						this.Element(row, i));
-				}
-				return thisRow;
-			}
-			set
-			{
-				if (!CheckMatrixAccessIndices(this, row))
-					throw new IndexOutOfRangeException();
-
-				for (uint i = 0; i < dimensions[1]; i++)
-				{
-					Element(row, i, value.Element(i));
-				}
-			}
-		}
-
+		/// <param name="A">first matrix</param>
+		/// <param name="B">second matrix</param>
+		/// <returns>sum matrix of A and B</returns>
 		public static Matrix operator +(Matrix A, Matrix B)
 		{
 			// dimensions check
@@ -502,6 +520,12 @@ namespace SharpSight.Math
 			return returnedMatrix;
 		} 
 
+		/// <summary>
+		/// Adding scalar to all matrix elements
+		/// </summary>
+		/// <param name="scalar">scalar number</param>
+		/// <param name="mat">input matrix</param>
+		/// <returns>matrix whos elements are sum of 'mat' matrix and the scalar</returns>
 		public static Matrix operator +(double scalar, Matrix mat)
 		{
 			Matrix returnedMat = new Matrix(mat.dimensions[0], mat.dimensions[1]);
@@ -516,11 +540,23 @@ namespace SharpSight.Math
 			return returnedMat;
 		}
 
+		/// <summary>
+		/// Adding scalar to all matrix elements
+		/// </summary>
+		/// <param name="mat">input matrix</param>
+		/// <param name="scalar">scalar number</param>
+		/// <returns>matrix whos elements are sum of 'mat' elements and scalar</returns>
 		public static Matrix operator +(Matrix mat, double scalar)
 		{
 			return scalar + mat;
 		}
 
+		/// <summary>
+		/// Subtraction operator for two matrices
+		/// </summary>
+		/// <param name="A">first matrix</param>
+		/// <param name="B">second matrix</param>
+		/// <returns>matrix A subtracted by matrix B</returns>
 		public static Matrix operator -(Matrix A, Matrix B)
 		{
 			// dimensions check
@@ -538,6 +574,12 @@ namespace SharpSight.Math
 			return A + B;
 		}
 
+		/// <summary>
+		/// Subtract scalar from all matrix elements
+		/// </summary>
+		/// <param name="scalar">scalar number</param>
+		/// <param name="mat">input matrix</param>
+		/// <returns>matrix whos elements are 'mat' elements subtracted from scalar</returns>
 		public static Matrix operator -(double scalar, Matrix mat)
 		{
 			Matrix returnedMat = new Matrix(mat.dimensions[0], mat.dimensions[1]);
@@ -554,6 +596,12 @@ namespace SharpSight.Math
 			return returnedMat;
 		}
 
+		/// <summary>
+		/// Subtract scalar from all matrix elements
+		/// </summary>
+		/// <param name="mat">input matrix</param>
+		/// <param name="scalar">scalar number</param>
+		/// <returns>matrix whos elements are scalar subtracted from 'mat' elements</returns>
 		public static Matrix operator -(Matrix mat, double scalar)
 		{
 			Matrix returnedMat = scalar - mat;
@@ -563,6 +611,12 @@ namespace SharpSight.Math
 			return returnedMat;
 		}
 
+		/// <summary>
+		/// Multiplication operator for two matrices
+		/// </summary>
+		/// <param name="A">first matrix</param>
+		/// <param name="B">second matrix</param>
+		/// <returns>product of A and B</returns>
 		public static Matrix operator *(Matrix A, Matrix B)
 		{
 			if (A.dimensions[1] != B.dimensions[0])
@@ -585,6 +639,12 @@ namespace SharpSight.Math
 			return product;
 		}
 
+		/// <summary>
+		/// Multiplication operator for matrix and scalar
+		/// </summary>
+		/// <param name="scalar">scalar number</param>
+		/// <param name="mat">input matrix</param>
+		/// <returns>matrix whos elements are products of 'mat' elements and scalar</returns>
 		public static Matrix operator *(double scalar, Matrix mat)
 		{
 			Matrix returnedMat = new Matrix(mat.dimensions[0], mat.dimensions[1]);
@@ -599,6 +659,12 @@ namespace SharpSight.Math
 			return returnedMat;
 		}
 
+		/// <summary>
+		/// Multiplication operator for matrix and scalar
+		/// </summary>
+		/// <param name="mat">input matrix</param>
+		/// <param name="scalar">scalar number</param>
+		/// <returns>matrix whos elements are products of 'mat' elements and scalar</returns>
 		public static Matrix operator *(Matrix mat, double scalar)
 		{
 			return scalar * mat;
@@ -709,6 +775,13 @@ namespace SharpSight.Math
 			return true;
 		}
 
+		/// <summary>
+		/// Checks validity of [row,col] access indices compared to matrix size
+		/// </summary>
+		/// <param name="A">input matrix</param>
+		/// <param name="row">row index</param>
+		/// <param name="col">col index</param>
+		/// <returns>flag indicating if access indices are valid or not</returns>
 		private static bool CheckMatrixAccessIndices(Matrix A, uint row, uint col)
 		{
 			// Making sure given row and col are valid
@@ -719,6 +792,12 @@ namespace SharpSight.Math
 			return true;
 		}
 
+		/// <summary>
+		/// Checks validity of [row] access index compared to matrix size
+		/// </summary>
+		/// <param name="A">input matrix</param>
+		/// <param name="row">row index</param>
+		/// <returns>flag indicating if 'row' is a valid index in 'A' matrix</returns>
 		private static bool CheckMatrixAccessIndices(Matrix A, uint row)
 		{
 			// Making sure given row and col are valid
