@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 using SharpSight.Math;
+using SharpSight.Math.Numerical;
 
 namespace SharpSight.Math.Tests
 {
@@ -121,6 +117,17 @@ namespace SharpSight.Math.Tests
 			Matrix f = b.Transpose().Concat(a, false);
 			Console.WriteLine(f.ToString());
 			*/ 
+		}
+
+		public static void TestInversion()
+		{
+			Matrix toInv = new Matrix(3,3);
+			toInv.Eye();
+			toInv[0, 0] = 2;
+			Console.WriteLine(toInv.ToString());
+											
+			Matrix inverted = MatrixOperations.GaussJordanInversion(toInv);
+			Console.WriteLine(inverted.ToString());
 		}
 	}
 }

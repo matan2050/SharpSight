@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SharpSight.Math.Numerical
 {
@@ -59,6 +55,47 @@ namespace SharpSight.Math.Numerical
 			}
 
 			return elementary;
+		}
+
+		public static Matrix GaussJordanInversion(Matrix toInvert)
+		{
+			Matrix inverted = new Matrix(toInvert.Dimensions[0], toInvert.Dimensions[1]);
+			inverted.Eye();
+
+			// initially finding the row with first most
+			// non-zero element
+			var			pivotList   			     = new List<uint>();
+			uint        availableRowForInterchange   = 0;
+
+			// propogating by columns
+			for (uint i = 0; i < toInvert.Dimensions[1]; i++)
+			{
+				pivotList = toInvert.IndexByFirstNonzeroElement(i);
+
+				if (pivotList.Count == 0)
+					continue;
+
+				// interchanging found row with first row
+				toInvert.InterchangeRow(availableRowForInterchange, pivotList[0]);
+				inverted.InterchangeRow(availableRowForInterchange, pivotList[0]);
+
+				// scale row so first element is 1	TODO - CHECK FOR SOLUTION WHEN SCALING FACTOR CLOSE TO 0
+				double scaleFactor = 1 / toInvert.Element(availableRowForInterchange, i);
+				inverted.MultiplyRowByScalar(availableRowForInterchange, scaleFactor);
+				toInvert.MultiplyRowByScalar(availableRowForInterchange, scaleFactor);
+
+				for (uint j = 0; j < pivotList.Count; j++)
+				{
+					toInvert.AddMultipliedRow(pivotList[(int)j], availableRowForInterchange,
+						-(toInvert.Element(pivotList[(int)j], i)));
+
+					inverted.AddMultipliedRow(pivotList[(int)j], availableRowForInterchange,
+						-(toInvert.Element(pivotList[(int)j], i)));
+				}
+
+				availableRowForInterchange++;
+			}
+			return inverted;
 		}
 	}
 }
