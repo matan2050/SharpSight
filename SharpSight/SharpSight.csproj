@@ -40,11 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraModel\BaseModel.cs" />
     <Compile Include="CameraModel\PinholeModel.cs" />
-    <Compile Include="Math\Matrix.cs" />
+    <Compile Include="Exceptions\MatrixDimensionMismatchException.cs" />
+    <Compile Include="Exceptions\SquareMatrixExpectedException.cs" />
+    <Compile Include="Math\Matrix.Definitions.cs" />
+    <Compile Include="Math\Matrix.Operations.cs" />
+    <Compile Include="Math\Numerical\MatrixOperations.cs" />
+    <Compile Include="Math\Command.cs" />
+    <Compile Include="Math\Quaternion.cs" />
+    <Compile Include="Math\RotationMatrix.cs" />
+    <Compile Include="Math\Tests\MatrixTest.cs" />
+    <Compile Include="Math\Vector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
