@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using SharpSight.Exceptions;
 
 namespace SharpSight.Math
 {
-	public class Matrix
+	public partial class Matrix
 	{
 		#region FIELDS
 		private     double[,]       matrixData;
-		private     uint[]			dimensions;
+		private     uint[]          dimensions;
 		#endregion
 
 
 		#region CONSTRUCTORS
-		
+
 		// default ctor
 		public Matrix(uint nRows, uint nCols)
 		{
@@ -68,7 +65,8 @@ namespace SharpSight.Math
 					if ((i >= rowPos) && (i < rowPos + matToExpand.dimensions[0]) &&
 						(j >= colPos) && (j < colPos + matToExpand.dimensions[1]))
 					{
-						Element(i, j, matToExpand.Element(i - rowPos, j - colPos));
+						Element(i, j, 
+							matToExpand.Element(i - rowPos, j - colPos));
 					}
 					else
 					{
@@ -152,7 +150,8 @@ namespace SharpSight.Math
 			{
 				if (!CheckMatrixAccessIndices(this, row, col))
 					throw new IndexOutOfRangeException();
-				Element(row, col, value);
+				Element(row, col, 
+					value);
 			}
 		}
 
@@ -184,7 +183,8 @@ namespace SharpSight.Math
 
 				for (uint i = 0; i < dimensions[1]; i++)
 				{
-					Element(row, i, value.Element(i));
+					Element(row, i, 
+						value.Element(i));
 				}
 			}
 		}
@@ -327,11 +327,15 @@ namespace SharpSight.Math
 			for (uint i = 0; i < dimensions[0]; i++)
 			{
 				bool preceedingNonZeroFlag = false;
-				for (uint j = col; col >= 0; col--)
+
+				for (int j = (int)col - 1; j >= 0; j--)
 				{
-					if (Element(i, j) != 0)
+					// checking for non-zero elements in the preceeding columns
+					if (Element(i, (uint)j) != 0)
+					{
 						preceedingNonZeroFlag = true;
 						break;
+					}
 				}
 				if ((Element(i, col) != 0) && (!preceedingNonZeroFlag))
 				{
@@ -339,158 +343,6 @@ namespace SharpSight.Math
 				}
 			}
 			return returnedIndices;
-		}
-		#endregion
-
-
-		#region METHODS
-		/// <summary>
-		/// Transposes the matrix
-		/// </summary>
-		/// <returns>transposed matrix</returns>
-		public Matrix Transpose()
-		{
-			Matrix transposed = new Matrix(this.dimensions[1], this.dimensions[0]);
-
-			for (uint i = 0; i < this.dimensions[0]; i++)
-			{
-				for (uint j = 0; j < this.dimensions[1]; j++)
-				{
-					transposed.Element(j, i, this.Element(i, j));
-				}
-			}
-
-			return transposed;
-		}
-
-		/// <summary>
-		/// Determinant methods
-		/// </summary>
-		/// <returns>Matrix determinant</returns>
-		public double Det()
-		{
-			throw new NotImplementedException();		// TODO - IMPLEMENT
-		}
-
-		/// <summary>
-		/// Returns matrix magnitude
-		/// </summary>
-		/// <returns>matrix norm</returns>
-		public double Norm()
-		{
-			double squareSum = 0;
-
-			for (uint i = 0; i < dimensions[0]; i++)
-			{
-				for (uint j = 0; j < dimensions[1]; j++)
-				{
-					squareSum += System.Math.Pow(Element(i, j), 2);
-				}
-			}
-			return System.Math.Sqrt(squareSum);
-		}
-		 
-		/// <summary>
-		/// Returns a normalized matrix from current 
-		/// (all elements divided by matrix magnitude)
-		/// </summary>
-		/// <returns>normalized matrix</returns>
-		public Matrix Normalize()
-		{
-			Matrix	normalized	= new Matrix(dimensions[0], dimensions[1]);
-			double	matrixNorm	= Norm();
-
-			for (uint i = 0; i < dimensions[0]; i++)
-			{
-				for (uint j = 0; j < dimensions[1]; j++)
-				{
-					normalized.Element(i, j,
-						Element(i, j) / matrixNorm);
-				}
-			}
-
-			return normalized;
-		}
-		
-		/// <summary>
-		/// Returns diagonal elements in the matrix
-		/// </summary>
-		/// <returns>vector that represents the matrix diagonal elements</returns>
-		public Vector Diag()
-		{
-			if (dimensions[0] != dimensions[1])
-				throw new Exception();		 // TODO - IMPLEMENT SPECIFIC EXCEPTION
-
-			Vector diagonal = new Vector(dimensions[0]);
-
-			for (uint i = 0; i < dimensions[0]; i++)
-				diagonal.Element(i, Element(i, i));
-
-			return diagonal;
-		}
-
-		/// <summary>
-		/// Concatenates two matrices if dimensions agree
-		/// </summary>
-		/// <param name="b">the matrix to concatenate to current matrix</param>
-		/// <param name="horizontal">flag to indicate horizontal concatenation</param>
-		/// <returns>concatenated matrix</returns>
-		public Matrix Concat(Matrix b, bool horizontal)
-		{
-			Matrix returnedMat = new Matrix(0,0);
-
-			if (horizontal)
-			{
-				if (this.dimensions[0] == b.dimensions[0])
-				{
-					returnedMat = new Matrix(this.dimensions[0], this.dimensions[1] + b.dimensions[1]);
-					for (uint i = 0; i < this.dimensions[0]; i++)
-					{
-						for (uint j = 0; j < this.dimensions[1] + b.dimensions[1]; j++)
-						{
-							if (j >= this.dimensions[1])
-							{
-								returnedMat.Element(i, j, b.Element(i, j - this.dimensions[1]));
-							}
-							else
-							{
-								returnedMat.Element(i, j, this.Element(i, j));
-							}
-						}
-					}
-				}
-			}
-			return returnedMat;
-		}
-
-		/// <summary>
-		/// ToString override method
-		/// </summary>
-		/// <returns>string representing matrix</returns>
-		public override string ToString()
-		{
-			string returnedString = "[";
-
-			for (uint i = 0; i < dimensions[0]; i++)
-			{
-				for (uint j = 0; j < dimensions[1]; j++)
-				{
-					returnedString += Element(i, j).ToString();
-
-					if (j != dimensions[1] - 1)
-					{
-						returnedString += ", ";
-					}
-					if ((j == dimensions[1] - 1) && (i != dimensions[0] - 1))
-					{
-						returnedString += '\n';
-					}
-				}
-			}
-
-			returnedString += ']';
-
-			return returnedString;
 		}
 		#endregion
 
@@ -509,16 +361,16 @@ namespace SharpSight.Math
 				throw new MatrixDimensionMismatchException();
 
 			Matrix returnedMatrix = new Matrix(A.dimensions[0], A.dimensions[1]);
-			for (uint i=0; i<A.dimensions[0]; i++)
+			for (uint i = 0; i < A.dimensions[0]; i++)
 			{
-				for (uint j=0; j<A.dimensions[1]; j++)
+				for (uint j = 0; j < A.dimensions[1]; j++)
 				{
-					returnedMatrix.Element(i, j, 
-						A.Element(i, j) + B.Element(i, j)); 
+					returnedMatrix.Element(i, j,
+						A.Element(i, j) + B.Element(i, j));
 				}
 			}
 			return returnedMatrix;
-		} 
+		}
 
 		/// <summary>
 		/// Adding scalar to all matrix elements
@@ -533,7 +385,7 @@ namespace SharpSight.Math
 			{
 				for (uint j = 0; j < mat.dimensions[1]; j++)
 				{
-					returnedMat.Element(i, j, 
+					returnedMat.Element(i, j,
 						mat.Element(i, j) + scalar);
 				}
 			}
@@ -563,11 +415,11 @@ namespace SharpSight.Math
 			if (!CheckPairDimensions(A, B))
 				throw new MatrixDimensionMismatchException();
 
-			for (uint i = 0; i<B.dimensions[0]; i++)
+			for (uint i = 0; i < B.dimensions[0]; i++)
 			{
-				for (uint j = 0; j<B.dimensions[1]; j++)
+				for (uint j = 0; j < B.dimensions[1]; j++)
 				{
-					B.Element(i, j, 
+					B.Element(i, j,
 						-B.Element(i, j));
 				}
 			}
@@ -606,7 +458,7 @@ namespace SharpSight.Math
 		{
 			Matrix returnedMat = scalar - mat;
 
-			returnedMat = (-1.0)*returnedMat;
+			returnedMat = (-1.0) * returnedMat;
 
 			return returnedMat;
 		}
@@ -653,7 +505,8 @@ namespace SharpSight.Math
 			{
 				for (uint j = 0; j < mat.dimensions[1]; j++)
 				{
-					returnedMat.Element(i, j, scalar * mat.Element(i, j));
+					returnedMat.Element(i, j, 
+						scalar * mat.Element(i, j));
 				}
 			}
 			return returnedMat;
@@ -758,16 +611,16 @@ namespace SharpSight.Math
 		#endregion
 
 
-		#region PRIVATE_METHODS
+		#region VALIDATION_METHODS
 		/// <summary>
 		/// method to check if two matrices have identical dimensions
 		/// </summary>
 		/// <param name="a">left hand side matrix in comparison</param>
 		/// <param name="b">right hand side matrix in comparison</param>
 		/// <returns>indication if identical</returns>
-		private static bool CheckPairDimensions(Matrix A, Matrix B)
-		{ 
-			if ((A.dimensions[0] != B.dimensions[0]) 
+		public static bool CheckPairDimensions(Matrix A, Matrix B)
+		{
+			if ((A.dimensions[0] != B.dimensions[0])
 				|| (A.dimensions[1] != B.dimensions[1]))
 			{
 				return false;
@@ -782,7 +635,7 @@ namespace SharpSight.Math
 		/// <param name="row">row index</param>
 		/// <param name="col">col index</param>
 		/// <returns>flag indicating if access indices are valid or not</returns>
-		private static bool CheckMatrixAccessIndices(Matrix A, uint row, uint col)
+		public static bool CheckMatrixAccessIndices(Matrix A, uint row, uint col)
 		{
 			// Making sure given row and col are valid
 			if ((row >= A.dimensions[0]) || (row < 0) ||
@@ -798,7 +651,7 @@ namespace SharpSight.Math
 		/// <param name="A">input matrix</param>
 		/// <param name="row">row index</param>
 		/// <returns>flag indicating if 'row' is a valid index in 'A' matrix</returns>
-		private static bool CheckMatrixAccessIndices(Matrix A, uint row)
+		public static bool CheckMatrixAccessIndices(Matrix A, uint row)
 		{
 			// Making sure given row and col are valid
 			if ((row >= A.dimensions[0]) || (row < 0))
