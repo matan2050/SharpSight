@@ -52,6 +52,7 @@
     <Compile Include="Math\RotationMatrix.cs" />
     <Compile Include="Math\Tests\MatrixTest.cs" />
     <Compile Include="Math\Vector.cs" />
+    <Compile Include="Polynomial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

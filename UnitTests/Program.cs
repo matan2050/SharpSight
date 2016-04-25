@@ -17,6 +17,7 @@ namespace UnitTests
 			MatrixTest.TestConstructors();
 			MatrixTest.TestSpecialMatrices();
 			MatrixTest.TestConcatenation();
+			MatrixTest.TestInversion();
 		}		
 	}
 }

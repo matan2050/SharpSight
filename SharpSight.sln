@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSight", "SharpSight\SharpSight.csproj", "{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathMatrixTests", "MatrixConstructTests\MathMatrixTests.csproj", "{6E4EE2AC-F64A-485B-BB26-836092473E17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5EDFBAB-D39A-4F48-B73E-ECA3AFDF3C7B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEFA2BAF-3290-4CA4-9781-0EB73791B29C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E4EE2AC-F64A-485B-BB26-836092473E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E4EE2AC-F64A-485B-BB26-836092473E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E4EE2AC-F64A-485B-BB26-836092473E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E4EE2AC-F64A-485B-BB26-836092473E17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
