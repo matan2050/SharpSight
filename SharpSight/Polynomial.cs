@@ -1,4 +1,5 @@
 ﻿using SharpSight.Math;
+using SharpSight.Exceptions;
 
 namespace SharpSight
 {
@@ -20,7 +21,22 @@ namespace SharpSight
 
 
 		#region METHODS
+		public double Calculate(Vector parameters)
+		{
+			if (parameters.Dimensions != this.coefficients.Dimensions)
+			{
+				throw new MatrixDimensionMismatchException();
+			}
 
+			double valueAtPoint = 0;
+
+			for (int i = 0; i < this.coefficients.MatrixData.Length; i++)
+			{
+				valueAtPoint += this.coefficients[i] * parameters[i];
+			}
+
+			return valueAtPoint;
+		}
 		#endregion
 
 
