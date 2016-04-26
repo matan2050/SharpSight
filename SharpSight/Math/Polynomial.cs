@@ -21,7 +21,7 @@ namespace SharpSight
 
 
 		#region METHODS
-		public double Calculate(Vector parameters)
+		public double Value(Vector parameters)
 		{
 			if (parameters.Dimensions != this.coefficients.Dimensions)
 			{
@@ -30,7 +30,7 @@ namespace SharpSight
 
 			double valueAtPoint = 0;
 
-			for (int i = 0; i < this.coefficients.MatrixData.Length; i++)
+			for (uint i = 0; i < this.coefficients.MatrixData.Length; i++)
 			{
 				valueAtPoint += this.coefficients[i] * parameters[i];
 			}
