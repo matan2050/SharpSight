@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace SharpSight.Math.Numerical
+using SharpSight.Exceptions;
+
+namespace SharpSight.Math
 {
-	public static class MatrixOperations
+	public partial class Matrix
 	{
 		/// <summary>
 		/// Cholesky decomposition
@@ -16,7 +19,6 @@ namespace SharpSight.Math.Numerical
 			return decomposed;
 		}
 
-
 		/// <summary>
 		/// Generate elementary matrix from matrix A
 		/// </summary>
@@ -28,8 +30,8 @@ namespace SharpSight.Math.Numerical
 
 			// initially finding the row with first most
 			// non-zero element
-			List<uint>	leadingNonZeroRows			= new List<uint>();
-			uint		availableRowForIntechange	= 0;
+			List<uint>  leadingNonZeroRows          = new List<uint>();
+			uint        availableRowForIntechange   = 0;
 
 			for (uint i = 0; i < A.Dimensions[1]; i++)
 			{
@@ -42,7 +44,7 @@ namespace SharpSight.Math.Numerical
 				A.InterchangeRow(availableRowForIntechange, leadingNonZeroRows[0]);
 
 				// scale row so first element is 1	TODO - CHECK FOR SOLUTION WHEN SCALING FACTOR CLOSE TO 0
-				A.MultiplyRowByScalar(availableRowForIntechange, 
+				A.MultiplyRowByScalar(availableRowForIntechange,
 					A.Element(availableRowForIntechange, i));
 
 				for (uint j = 0; j < leadingNonZeroRows.Count; j++)
@@ -57,6 +59,11 @@ namespace SharpSight.Math.Numerical
 			return elementary;
 		}
 
+		/// <summary>
+		/// Calculate the matrix B, where A*B=I
+		/// </summary>
+		/// <param name="toInvert">the matrix we wish to invert</param>
+		/// <returns>inverted matrix</returns>
 		public static Matrix GaussJordanInversion(Matrix toInvert)
 		{
 			Matrix inverted = new Matrix(toInvert.Dimensions[0], toInvert.Dimensions[1]);
@@ -64,7 +71,7 @@ namespace SharpSight.Math.Numerical
 
 			// initially finding the row with first most
 			// non-zero element
-			var			pivotList   			     = new List<uint>();
+			var         pivotList                    = new List<uint>();
 			uint        availableRowForInterchange   = 0;
 
 			// propogating by columns
