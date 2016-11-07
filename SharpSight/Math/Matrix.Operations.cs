@@ -14,11 +14,11 @@ namespace SharpSight.Math
 		/// <returns>transposed matrix</returns>
 		public Matrix Transpose()
 		{
-			Matrix transposed = new Matrix(this.dimensions[1], this.dimensions[0]);
+			Matrix transposed = new Matrix(m_Dimensions[1], m_Dimensions[0]);
 
-			for (uint i = 0; i < this.dimensions[0]; i++)
+			for (uint i = 0; i < m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < this.dimensions[1]; j++)
+				for (uint j = 0; j < m_Dimensions[1]; j++)
 				{
 					transposed.Element(j, i,
 						this.Element(i, j));
@@ -45,9 +45,9 @@ namespace SharpSight.Math
 		{
 			double squareSum = 0;
 
-			for (uint i = 0; i < dimensions[0]; i++)
+			for (uint i = 0; i < m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < dimensions[1]; j++)
+				for (uint j = 0; j < m_Dimensions[1]; j++)
 				{
 					squareSum += System.Math.Pow(Element(i, j), 2);
 				}
@@ -62,12 +62,12 @@ namespace SharpSight.Math
 		/// <returns>normalized matrix</returns>
 		public Matrix Normalize()
 		{
-			Matrix  normalized  = new Matrix(dimensions[0], dimensions[1]);
+			Matrix  normalized  = new Matrix(m_Dimensions[0], m_Dimensions[1]);
 			double  matrixNorm  = Norm();
 
-			for (uint i = 0; i < dimensions[0]; i++)
+			for (uint i = 0; i < m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < dimensions[1]; j++)
+				for (uint j = 0; j < m_Dimensions[1]; j++)
 				{
 					normalized.Element(i, j,
 						Element(i, j) / matrixNorm);
@@ -83,12 +83,12 @@ namespace SharpSight.Math
 		/// <returns>vector that represents the matrix diagonal elements</returns>
 		public Vector Diag()
 		{
-			if (dimensions[0] != dimensions[1])
+			if (m_Dimensions[0] != m_Dimensions[1])
 				throw new Exception();       // TODO - IMPLEMENT SPECIFIC EXCEPTION
 
-			Vector diagonal = new Vector(dimensions[0]);
+			Vector diagonal = new Vector(m_Dimensions[0]);
 
-			for (uint i = 0; i < dimensions[0]; i++)
+			for (uint i = 0; i < m_Dimensions[0]; i++)
 				diagonal.Element(i,
 					Element(i, i));
 
@@ -107,17 +107,17 @@ namespace SharpSight.Math
 
 			if (horizontal)
 			{
-				if (this.dimensions[0] == b.dimensions[0])
+				if (m_Dimensions[0] == b.Dimensions[0])
 				{
-					returnedMat = new Matrix(this.dimensions[0], this.dimensions[1] + b.dimensions[1]);
-					for (uint i = 0; i < this.dimensions[0]; i++)
+					returnedMat = new Matrix(m_Dimensions[0], m_Dimensions[1] + b.Dimensions[1]);
+					for (uint i = 0; i < m_Dimensions[0]; i++)
 					{
-						for (uint j = 0; j < this.dimensions[1] + b.dimensions[1]; j++)
+						for (uint j = 0; j < m_Dimensions[1] + b.Dimensions[1]; j++)
 						{
-							if (j >= this.dimensions[1])
+							if (j >= m_Dimensions[1])
 							{
 								returnedMat.Element(i, j,
-									b.Element(i, j - this.dimensions[1]));
+									b.Element(i, j - m_Dimensions[1]));
 							}
 							else
 							{
@@ -139,17 +139,17 @@ namespace SharpSight.Math
 		{
 			string returnedString = "[";
 
-			for (uint i = 0; i < dimensions[0]; i++)
+			for (uint i = 0; i < m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < dimensions[1]; j++)
+				for (uint j = 0; j < m_Dimensions[1]; j++)
 				{
 					returnedString += Element(i, j).ToString();
 
-					if (j != dimensions[1] - 1)
+					if (j != m_Dimensions[1] - 1)
 					{
 						returnedString += ", ";
 					}
-					if ((j == dimensions[1] - 1) && (i != dimensions[0] - 1))
+					if ((j == m_Dimensions[1] - 1) && (i != m_Dimensions[0] - 1))
 					{
 						returnedString += ";\n";
 					}

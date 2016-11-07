@@ -8,6 +8,10 @@ namespace SharpSight.Exceptions
 {
 	public class MatrixDimensionMismatchException : Exception
 	{
+		public MatrixDimensionMismatchException()
+		{
+
+		}
 		// TODO - IMPLEMENT
 	}
 }

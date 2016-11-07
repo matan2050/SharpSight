@@ -1,7 +1,5 @@
 ﻿using System;
-
 using SharpSight.Math;
-using SharpSight.Math.Numerical;
 
 namespace SharpSight.Math.Tests
 {
@@ -119,7 +117,7 @@ namespace SharpSight.Math.Tests
 			*/ 
 		}
 
-		public static void TestInversion()
+		/*public static void TestInversion()
 		{
 			Matrix toInv = new Matrix(3,3);
 			toInv.Eye();
@@ -128,6 +126,6 @@ namespace SharpSight.Math.Tests
 											
 			Matrix inverted = MatrixOperations.GaussJordanInversion(toInv);
 			Console.WriteLine(inverted.ToString());
-		}
+		}*/
 	}
 }

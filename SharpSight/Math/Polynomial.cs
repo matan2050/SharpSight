@@ -6,37 +6,48 @@ namespace SharpSight
 	public class Polynomial
 	{
 		#region FIELDS
-		private Vector	coefficients;
-		private uint    degree;
+		private Vector	m_Coefficients;
+		private Vector  m_Powers;
+		private uint	m_Degree;
 		#endregion
 
 
 		#region CONSTRUCTORS
-		public Polynomial(Vector coeffs)
+		public Polynomial(Vector coeffs, Vector powers)
 		{
-			this.coefficients = coeffs;
-			this.degree = (uint)coefficients.MatrixData.Length;
+			if (powers.MatrixData.Length != coeffs.MatrixData.Length)
+			{
+				throw new MatrixDimensionMismatchException();
+			}
+
+			m_Coefficients = coeffs;
+			m_Powers = powers;
+
+			m_Degree = (uint)m_Coefficients.MatrixData.Length;
 		}
 		#endregion
 
 
 		#region METHODS
-		public double Value(Vector parameters)
+		public double Forward(Vector ndPoint)
 		{
-			if (parameters.Dimensions != this.coefficients.Dimensions)
+			if (ndPoint.Dimensions != m_Coefficients.Dimensions)
 			{
 				throw new MatrixDimensionMismatchException();
 			}
 
-			double valueAtPoint = 0;
+			double value = 0;
 
-			for (uint i = 0; i < this.coefficients.MatrixData.Length; i++)
+			for (uint i = 0; i < m_Coefficients.MatrixData.Length; i++)
 			{
-				valueAtPoint += this.coefficients[i] * parameters[i];
+				value += m_Coefficients[i] * ndPoint[i];
 			}
 
-			return valueAtPoint;
+			return value;
 		}
+
+
+
 		#endregion
 
 
@@ -45,12 +56,12 @@ namespace SharpSight
 		{
 			get
 			{
-				return this.coefficients;
+				return m_Coefficients;
 			}
 			set
 			{
-				this.coefficients = value;
-				this.degree = (uint)coefficients.MatrixData.Length;
+				m_Coefficients = value;
+				m_Degree = (uint)m_Coefficients.MatrixData.Length;
 			}
 		}
 
@@ -58,7 +69,7 @@ namespace SharpSight
 		{
 			get
 			{
-				return this.degree;
+				return m_Degree;
 			}
 		}
 		#endregion

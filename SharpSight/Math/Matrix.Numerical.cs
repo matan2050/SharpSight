@@ -16,15 +16,16 @@ namespace SharpSight.Math
 		{
 			Matrix decomposed = new Matrix(A.Dimensions[0], A.Dimensions[1]);
 
+			//	TODO: IMPLEMENT CHOLESKY DECOMPOSITION
 			return decomposed;
 		}
 
 		/// <summary>
-		/// Generate elementary matrix from matrix A
+		/// Generate elementary matrix from matrix A using gaussian elimination
 		/// </summary>
 		/// <param name="A">matrix to apply row reduction</param>
 		/// <returns>elementary matrix based on A</returns>
-		public static Matrix GenerateElementaryMatrix(Matrix A)
+		public static Matrix Reduce(Matrix A)
 		{
 			Matrix elementary = new Matrix(A.Dimensions[0], A.Dimensions[1]);
 
@@ -58,6 +59,30 @@ namespace SharpSight.Math
 
 			return elementary;
 		}
+
+		public static void LU(Matrix A, out Matrix L, out Matrix U)
+		{
+			L = new Matrix(1, 1);
+			U = new Matrix(1, 1);
+			//	TODO: IMPLEMENT LU DECOMPOSITION
+		}
+
+		public static void QR(Matrix A, out Matrix Q, out Matrix R)
+		{
+			Q = new Matrix(1, 1);
+			R = new Matrix(1, 1);
+			// TODO: IMPLEMENT QR DECOMPOSITION
+		}
+
+		public static void SVD(Matrix A, out Matrix U, out Matrix S, out Matrix V)
+		{
+			U = new Matrix(1, 1);
+			S = new Matrix(1, 1);
+			V = new Matrix(1, 1);
+			// TODO: IMPLEMENT SVD DECOMPOSITION
+		}
+
+
 
 		/// <summary>
 		/// Calculate the matrix B, where A*B=I
