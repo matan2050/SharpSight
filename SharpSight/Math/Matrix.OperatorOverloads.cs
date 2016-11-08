@@ -23,10 +23,10 @@ namespace SharpSight.Math
 			if (!CheckPairDimensions(A, B))
 				throw new MatrixDimensionMismatchException();
 
-			Matrix returnedMatrix = new Matrix(A.Dimensions[0], A.Dimensions[1]);
-			for (uint i = 0; i < A.Dimensions[0]; i++)
+			Matrix returnedMatrix = new Matrix(A.m_Dimensions[0], A.m_Dimensions[1]);
+			for (uint i = 0; i < A.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < A.Dimensions[1]; j++)
+				for (uint j = 0; j < A.m_Dimensions[1]; j++)
 				{
 					returnedMatrix.Element(i, j,
 						A.Element(i, j) + B.Element(i, j));
@@ -43,10 +43,10 @@ namespace SharpSight.Math
 		/// <returns>matrix whos elements are sum of 'mat' matrix and the scalar</returns>
 		public static Matrix operator +(double scalar, Matrix mat)
 		{
-			Matrix returnedMat = new Matrix(mat.Dimensions[0], mat.Dimensions[1]);
-			for (uint i = 0; i < mat.Dimensions[0]; i++)
+			Matrix returnedMat = new Matrix(mat.m_Dimensions[0], mat.m_Dimensions[1]);
+			for (uint i = 0; i < mat.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < mat.Dimensions[1]; j++)
+				for (uint j = 0; j < mat.m_Dimensions[1]; j++)
 				{
 					returnedMat.Element(i, j,
 						mat.Element(i, j) + scalar);
@@ -78,9 +78,9 @@ namespace SharpSight.Math
 			if (!CheckPairDimensions(A, B))
 				throw new MatrixDimensionMismatchException();
 
-			for (uint i = 0; i < B.Dimensions[0]; i++)
+			for (uint i = 0; i < B.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < B.Dimensions[1]; j++)
+				for (uint j = 0; j < B.m_Dimensions[1]; j++)
 				{
 					B.Element(i, j,
 						-B.Element(i, j));
@@ -97,11 +97,11 @@ namespace SharpSight.Math
 		/// <returns>matrix whos elements are 'mat' elements subtracted from scalar</returns>
 		public static Matrix operator -(double scalar, Matrix mat)
 		{
-			Matrix returnedMat = new Matrix(mat.Dimensions[0], mat.Dimensions[1]);
+			Matrix returnedMat = new Matrix(mat.m_Dimensions[0], mat.m_Dimensions[1]);
 
-			for (uint i = 0; i < mat.Dimensions[0]; i++)
+			for (uint i = 0; i < mat.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < mat.Dimensions[1]; j++)
+				for (uint j = 0; j < mat.m_Dimensions[1]; j++)
 				{
 					returnedMat.Element(i, j,
 						scalar - mat.Element(i, j));
@@ -134,16 +134,16 @@ namespace SharpSight.Math
 		/// <returns>product of A and B</returns>
 		public static Matrix operator *(Matrix A, Matrix B)
 		{
-			if (A.Dimensions[1] != B.Dimensions[0])
+			if (A.m_Dimensions[1] != B.m_Dimensions[0])
 				throw new MatrixDimensionMismatchException();
 
-			Matrix product = new Matrix(A.Dimensions[0], B.Dimensions[1]);
+			Matrix product = new Matrix(A.m_Dimensions[0], B.m_Dimensions[1]);
 
-			for (uint i = 0; i < product.Dimensions[0]; i++)
+			for (uint i = 0; i < product.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < product.Dimensions[1]; j++)
+				for (uint j = 0; j < product.m_Dimensions[1]; j++)
 				{
-					for (uint k = 0; k < A.Dimensions[1]; k++)
+					for (uint k = 0; k < A.m_Dimensions[1]; k++)
 					{
 						product.Element(i, j,
 							product.Element(i, j) + A.Element(i, k) * B.Element(k, j));
@@ -162,11 +162,11 @@ namespace SharpSight.Math
 		/// <returns>matrix whos elements are products of 'mat' elements and scalar</returns>
 		public static Matrix operator *(double scalar, Matrix mat)
 		{
-			Matrix returnedMat = new Matrix(mat.Dimensions[0], mat.Dimensions[1]);
+			Matrix returnedMat = new Matrix(mat.m_Dimensions[0], mat.m_Dimensions[1]);
 
-			for (uint i = 0; i < mat.Dimensions[0]; i++)
+			for (uint i = 0; i < mat.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < mat.Dimensions[1]; j++)
+				for (uint j = 0; j < mat.m_Dimensions[1]; j++)
 				{
 					returnedMat.Element(i, j,
 						scalar * mat.Element(i, j));
@@ -194,14 +194,14 @@ namespace SharpSight.Math
 		/// <returns>true for equal, false for inequal</returns>
 		public static bool Equals(Matrix A, Matrix B)
 		{
-			if ((A.Dimensions[0] != B.Dimensions[0]) && (A.Dimensions[1] != B.Dimensions[1]))
+			if ((A.m_Dimensions[0] != B.m_Dimensions[0]) && (A.m_Dimensions[1] != B.m_Dimensions[1]))
 			{
 				return false;
 			}
 
-			for (uint i = 0; i < A.Dimensions[0]; i++)
+			for (uint i = 0; i < A.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < A.Dimensions[1]; j++)
+				for (uint j = 0; j < A.m_Dimensions[1]; j++)
 				{
 					if (A.Element(i, j) != B.Element(i, j))
 					{

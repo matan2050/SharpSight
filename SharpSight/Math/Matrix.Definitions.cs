@@ -29,13 +29,13 @@ namespace SharpSight.Math
 		public Matrix(Matrix copiedMat)
 		{
 			m_Dimensions = new uint[2];
-			m_Dimensions[0] = copiedMat.Dimensions[0];
-			m_Dimensions[1] = copiedMat.Dimensions[1];
+			m_Dimensions[0] = copiedMat.m_Dimensions[0];
+			m_Dimensions[1] = copiedMat.m_Dimensions[1];
 			m_MatrixData = new double[m_Dimensions[0], m_Dimensions[1]];
 
-			for (uint i = 0; i < copiedMat.Dimensions[0]; i++)
+			for (uint i = 0; i < copiedMat.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < copiedMat.Dimensions[1]; j++)
+				for (uint j = 0; j < copiedMat.m_Dimensions[1]; j++)
 				{
 					Element(i, j, copiedMat.Element(i, j));
 				}
@@ -51,8 +51,8 @@ namespace SharpSight.Math
 			m_MatrixData = new double[m_Dimensions[0], m_Dimensions[1]];
 
 			// dimensions check
-			if ((nRows < rowPos + matToExpand.Dimensions[0]) ||
-				(nCols < colPos + matToExpand.Dimensions[1]))
+			if ((nRows < rowPos + matToExpand.m_Dimensions[0]) ||
+				(nCols < colPos + matToExpand.m_Dimensions[1]))
 			{
 				throw new IndexOutOfRangeException();
 			}
@@ -61,8 +61,8 @@ namespace SharpSight.Math
 			{
 				for (uint j = 0; j < m_Dimensions[1]; j++)
 				{
-					if ((i >= rowPos) && (i < rowPos + matToExpand.Dimensions[0]) &&
-						(j >= colPos) && (j < colPos + matToExpand.Dimensions[1]))
+					if ((i >= rowPos) && (i < rowPos + matToExpand.m_Dimensions[0]) &&
+						(j >= colPos) && (j < colPos + matToExpand.m_Dimensions[1]))
 					{
 						Element(i, j, 
 							matToExpand.Element(i - rowPos, j - colPos));
@@ -334,8 +334,8 @@ namespace SharpSight.Math
 		/// <returns>indication if identical</returns>
 		public static bool CheckPairDimensions(Matrix A, Matrix B)
 		{
-			if ((A.Dimensions[0] != B.Dimensions[0])
-				|| (A.Dimensions[1] != B.Dimensions[1]))
+			if ((A.m_Dimensions[0] != B.m_Dimensions[0])
+				|| (A.m_Dimensions[1] != B.m_Dimensions[1]))
 			{
 				return false;
 			}
@@ -352,8 +352,8 @@ namespace SharpSight.Math
 		public static bool CheckMatrixAccessIndices(Matrix A, uint row, uint col)
 		{
 			// Making sure given row and col are valid
-			if ((row >= A.Dimensions[0]) || (row < 0) ||
-				(col >= A.Dimensions[1]) || (col < 0))
+			if ((row >= A.m_Dimensions[0]) || (row < 0) ||
+				(col >= A.m_Dimensions[1]) || (col < 0))
 				return false;
 
 			return true;
@@ -368,7 +368,7 @@ namespace SharpSight.Math
 		public static bool CheckMatrixAccessIndices(Matrix A, uint row)
 		{
 			// Making sure given row and col are valid
-			if ((row >= A.Dimensions[0]) || (row < 0))
+			if ((row >= A.m_Dimensions[0]) || (row < 0))
 				return false;
 
 			return true;

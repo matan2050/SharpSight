@@ -107,12 +107,12 @@ namespace SharpSight.Math
 
 			if (horizontal)
 			{
-				if (m_Dimensions[0] == b.Dimensions[0])
+				if (m_Dimensions[0] == b.m_Dimensions[0])
 				{
-					returnedMat = new Matrix(m_Dimensions[0], m_Dimensions[1] + b.Dimensions[1]);
+					returnedMat = new Matrix(m_Dimensions[0], m_Dimensions[1] + b.m_Dimensions[1]);
 					for (uint i = 0; i < m_Dimensions[0]; i++)
 					{
-						for (uint j = 0; j < m_Dimensions[1] + b.Dimensions[1]; j++)
+						for (uint j = 0; j < m_Dimensions[1] + b.m_Dimensions[1]; j++)
 						{
 							if (j >= m_Dimensions[1])
 							{
