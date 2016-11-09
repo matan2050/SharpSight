@@ -1,4 +1,6 @@
-﻿namespace SharpSight.Math
+﻿using System;
+
+namespace SharpSight.Math
 {
 	public class Vector : Matrix
 	{
@@ -9,6 +11,11 @@
 
 		public Vector(Matrix mat) : base(mat.Dimensions[0], 1)
 		{
+			if (mat.Dimensions[1] != 1)
+			{
+				// TODO: CHANGE INTO MORE SPECIFIC EXCEPTION
+				throw new Exception("matrix si not in vector dimensions");
+			}
 		}
 		#endregion
 

@@ -21,12 +21,17 @@ namespace SharpSight.Math
 		{
 			// dimensions check
 			if (!CheckPairDimensions(A, B))
-				throw new MatrixDimensionMismatchException();
-
-			Matrix returnedMatrix = new Matrix(A.m_Dimensions[0], A.m_Dimensions[1]);
-			for (uint i = 0; i < A.m_Dimensions[0]; i++)
 			{
-				for (uint j = 0; j < A.m_Dimensions[1]; j++)
+				throw new MatrixDimensionMismatchException();
+			}
+
+			uint aRows = A.m_Dimensions[0];
+			uint aCols = A.m_Dimensions[1];
+
+			Matrix returnedMatrix = new Matrix(aRows, aCols);
+			for (uint i = 0; i < aRows; i++)
+			{
+				for (uint j = 0; j < aCols; j++)
 				{
 					returnedMatrix.Element(i, j,
 						A.Element(i, j) + B.Element(i, j));
@@ -43,10 +48,13 @@ namespace SharpSight.Math
 		/// <returns>matrix whos elements are sum of 'mat' matrix and the scalar</returns>
 		public static Matrix operator +(double scalar, Matrix mat)
 		{
-			Matrix returnedMat = new Matrix(mat.m_Dimensions[0], mat.m_Dimensions[1]);
-			for (uint i = 0; i < mat.m_Dimensions[0]; i++)
+			uint matRows = mat.m_Dimensions[0];
+			uint matCols = mat.m_Dimensions[1];
+
+			Matrix returnedMat = new Matrix(matRows, matCols);
+			for (uint i = 0; i < matRows; i++)
 			{
-				for (uint j = 0; j < mat.m_Dimensions[1]; j++)
+				for (uint j = 0; j < matCols; j++)
 				{
 					returnedMat.Element(i, j,
 						mat.Element(i, j) + scalar);
@@ -78,9 +86,12 @@ namespace SharpSight.Math
 			if (!CheckPairDimensions(A, B))
 				throw new MatrixDimensionMismatchException();
 
-			for (uint i = 0; i < B.m_Dimensions[0]; i++)
+			uint bRows = B.m_Dimensions[0];
+			uint bCols = B.m_Dimensions[1];
+
+			for (uint i = 0; i < bRows; i++)
 			{
-				for (uint j = 0; j < B.m_Dimensions[1]; j++)
+				for (uint j = 0; j < bCols; j++)
 				{
 					B.Element(i, j,
 						-B.Element(i, j));
@@ -97,11 +108,14 @@ namespace SharpSight.Math
 		/// <returns>matrix whos elements are 'mat' elements subtracted from scalar</returns>
 		public static Matrix operator -(double scalar, Matrix mat)
 		{
-			Matrix returnedMat = new Matrix(mat.m_Dimensions[0], mat.m_Dimensions[1]);
+			uint matRows = mat.m_Dimensions[0];
+			uint matCols = mat.m_Dimensions[1];
 
-			for (uint i = 0; i < mat.m_Dimensions[0]; i++)
+			Matrix returnedMat = new Matrix(matRows, matCols);
+
+			for (uint i = 0; i < matRows; i++)
 			{
-				for (uint j = 0; j < mat.m_Dimensions[1]; j++)
+				for (uint j = 0; j < matCols; j++)
 				{
 					returnedMat.Element(i, j,
 						scalar - mat.Element(i, j));
@@ -134,16 +148,25 @@ namespace SharpSight.Math
 		/// <returns>product of A and B</returns>
 		public static Matrix operator *(Matrix A, Matrix B)
 		{
-			if (A.m_Dimensions[1] != B.m_Dimensions[0])
+			uint aRows = A.Dimensions[0];
+			uint aCols = A.Dimensions[1];
+
+			uint bRows = B.Dimensions[0];
+			uint bCols = B.Dimensions[1];
+
+			if (aCols != bRows)
 				throw new MatrixDimensionMismatchException();
 
-			Matrix product = new Matrix(A.m_Dimensions[0], B.m_Dimensions[1]);
+			uint productRows = aRows;
+			uint productCols = bCols;
 
-			for (uint i = 0; i < product.m_Dimensions[0]; i++)
+			Matrix product = new Matrix(productRows, productCols);
+
+			for (uint i = 0; i < productRows; i++)
 			{
-				for (uint j = 0; j < product.m_Dimensions[1]; j++)
+				for (uint j = 0; j < productCols; j++)
 				{
-					for (uint k = 0; k < A.m_Dimensions[1]; k++)
+					for (uint k = 0; k < aCols; k++)
 					{
 						product.Element(i, j,
 							product.Element(i, j) + A.Element(i, k) * B.Element(k, j));
@@ -162,11 +185,15 @@ namespace SharpSight.Math
 		/// <returns>matrix whos elements are products of 'mat' elements and scalar</returns>
 		public static Matrix operator *(double scalar, Matrix mat)
 		{
-			Matrix returnedMat = new Matrix(mat.m_Dimensions[0], mat.m_Dimensions[1]);
 
-			for (uint i = 0; i < mat.m_Dimensions[0]; i++)
+			uint matRows = mat.Dimensions[0];
+			uint matCols = mat.Dimensions[1];
+
+			Matrix returnedMat = new Matrix(matRows, matCols);
+
+			for (uint i = 0; i < matRows; i++)
 			{
-				for (uint j = 0; j < mat.m_Dimensions[1]; j++)
+				for (uint j = 0; j < matCols; j++)
 				{
 					returnedMat.Element(i, j,
 						scalar * mat.Element(i, j));
@@ -194,14 +221,21 @@ namespace SharpSight.Math
 		/// <returns>true for equal, false for inequal</returns>
 		public static bool Equals(Matrix A, Matrix B)
 		{
-			if ((A.m_Dimensions[0] != B.m_Dimensions[0]) && (A.m_Dimensions[1] != B.m_Dimensions[1]))
+
+			uint aRows = A.Dimensions[0];
+			uint aCols = A.Dimensions[1];
+
+			uint bRows = B.Dimensions[0];
+			uint bCols = B.Dimensions[1];
+
+			if ((aRows != bRows) && (aCols != bCols))
 			{
 				return false;
 			}
 
-			for (uint i = 0; i < A.m_Dimensions[0]; i++)
+			for (uint i = 0; i < aRows; i++)
 			{
-				for (uint j = 0; j < A.m_Dimensions[1]; j++)
+				for (uint j = 0; j < aCols; j++)
 				{
 					if (A.Element(i, j) != B.Element(i, j))
 					{
